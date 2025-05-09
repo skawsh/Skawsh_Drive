@@ -7,6 +7,7 @@ export interface Trip {
   phoneNumber: string;
   address: string;
   distance: number;
+  action: "PICKUP" | "COLLECT";
   estimatedWeight?: number;
   items?: {
     category: string;
@@ -24,6 +25,7 @@ export const trips: Trip[] = [
     phoneNumber: "+91 9876543210",
     address: "Plot 42, Hitech City Road, Madhapur, Hyderabad, Telangana",
     distance: 3.2,
+    action: "PICKUP",
     estimatedWeight: 4.5,
     items: [
       { category: "Upper Wear", name: "Shirt", quantity: 3 },
@@ -39,10 +41,41 @@ export const trips: Trip[] = [
     phoneNumber: "+91 9865432109",
     address: "Flat 203, Sapphire Heights, Gachibowli, Hyderabad, Telangana",
     distance: 5.1,
+    action: "PICKUP",
     estimatedWeight: 3.2,
     items: [
       { category: "Upper Wear", name: "T-Shirt", quantity: 4 },
       { category: "Bottom Wear", name: "Shorts", quantity: 3 }
+    ]
+  },
+  {
+    id: "EXP-2345",
+    type: "EXPRESS",
+    serviceType: "Express Dry Clean",
+    customerName: "Ananya Singh",
+    phoneNumber: "+91 9843210965",
+    address: "Apartment 506, Green Valley Apartments, Kondapur, Hyderabad, Telangana",
+    distance: 4.8,
+    action: "COLLECT",
+    estimatedWeight: 1.5,
+    items: [
+      { category: "Upper Wear", name: "Blouse", quantity: 2 },
+      { category: "Bottom Wear", name: "Saree", quantity: 1 }
+    ]
+  },
+  {
+    id: "EXP-9012",
+    type: "EXPRESS",
+    serviceType: "Express Dry Clean & Press",
+    customerName: "Vikram Malhotra",
+    phoneNumber: "+91 9876123450",
+    address: "Villa 8, Cyber Pearl Colony, Hitec City, Hyderabad, Telangana",
+    distance: 2.9,
+    action: "COLLECT",
+    estimatedWeight: 2.0,
+    items: [
+      { category: "Upper Wear", name: "Formal Shirt", quantity: 2 },
+      { category: "Bottom Wear", name: "Trousers", quantity: 1 }
     ]
   },
   {
@@ -53,6 +86,7 @@ export const trips: Trip[] = [
     phoneNumber: "+91 9812345670",
     address: "Shop No. 7, Ameerpet Main Road, Ameerpet, Hyderabad, Telangana",
     distance: 7.5,
+    action: "PICKUP",
     estimatedWeight: 8.0,
     items: [
       { category: "Upper Wear", name: "Shirt", quantity: 5 },
@@ -69,25 +103,12 @@ export const trips: Trip[] = [
     phoneNumber: "+91 9854321076",
     address: "Villa 15, Jubilee Hills Road No. 10, Jubilee Hills, Hyderabad, Telangana",
     distance: 9.3,
+    action: "PICKUP",
     estimatedWeight: 2.7,
     items: [
       { category: "Upper Wear", name: "Formal Shirt", quantity: 2 },
       { category: "Bottom Wear", name: "Formal Pants", quantity: 2 },
       { category: "Upper Wear", name: "Suit", quantity: 1 }
-    ]
-  },
-  {
-    id: "EXP-2345",
-    type: "EXPRESS",
-    serviceType: "Express Dry Clean",
-    customerName: "Ananya Singh",
-    phoneNumber: "+91 9843210965",
-    address: "Apartment 506, Green Valley Apartments, Kondapur, Hyderabad, Telangana",
-    distance: 4.8,
-    estimatedWeight: 1.5,
-    items: [
-      { category: "Upper Wear", name: "Blouse", quantity: 2 },
-      { category: "Bottom Wear", name: "Saree", quantity: 1 }
     ]
   },
   {
@@ -98,6 +119,7 @@ export const trips: Trip[] = [
     phoneNumber: "+91 9832109654",
     address: "Shop 12, KPHB Colony Main Road, Kukatpally, Hyderabad, Telangana",
     distance: 12.6,
+    action: "COLLECT",
     estimatedWeight: 10.0,
     items: [
       { category: "Upper Wear", name: "T-Shirt", quantity: 8 },
@@ -105,6 +127,22 @@ export const trips: Trip[] = [
       { category: "Upper Wear", name: "Shirt", quantity: 7 },
       { category: "Bottom Wear", name: "Shorts", quantity: 4 },
       { category: "Shoe Cleaning", name: "Sneakers", quantity: 3 }
+    ]
+  },
+  {
+    id: "STD-3456",
+    type: "STANDARD",
+    serviceType: "Standard Ironing",
+    customerName: "Neha Kapoor",
+    phoneNumber: "+91 9876543219",
+    address: "Flat 405, Sunshine Apartments, Banjara Hills, Hyderabad, Telangana",
+    distance: 6.3,
+    action: "COLLECT",
+    estimatedWeight: 3.5,
+    items: [
+      { category: "Upper Wear", name: "Formal Shirt", quantity: 4 },
+      { category: "Bottom Wear", name: "Trousers", quantity: 3 },
+      { category: "Upper Wear", name: "Blouse", quantity: 2 }
     ]
   }
 ];

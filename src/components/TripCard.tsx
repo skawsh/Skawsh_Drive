@@ -15,6 +15,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
     navigate(`/active-trip/${trip.id}`);
   };
 
+  const buttonText = `Start ${trip.action === 'PICKUP' ? 'Pick up' : 'Collect'}`;
+
   return (
     <div className="bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100">
       <div className="flex justify-between items-start mb-2">
@@ -40,7 +42,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
         onClick={handleStartTrip}
         className="w-full py-2 bg-laundry-success text-white rounded-md font-medium hover:bg-green-600 transition-colors"
       >
-        {trip.type === 'EXPRESS' ? 'Start Pick up' : 'Start Collect'}
+        {buttonText}
       </button>
     </div>
   );
