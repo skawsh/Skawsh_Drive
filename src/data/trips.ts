@@ -20,22 +20,7 @@ export interface Trip {
 }
 
 export const trips: Trip[] = [
-  {
-    id: "EXP-1234",
-    type: "EXPRESS",
-    serviceType: "Express Wash",
-    customerName: "Rahul Sharma",
-    phoneNumber: "+91 9876543210",
-    address: "Plot 42, Hitech City Road, Madhapur, Hyderabad, Telangana",
-    distance: 3.2,
-    action: "PICKUP",
-    estimatedWeight: 4.5,
-    items: [
-      { category: "Upper Wear", name: "Shirt", quantity: 3 },
-      { category: "Bottom Wear", name: "Jeans", quantity: 2 },
-      { category: "Shoe Cleaning", name: "Sneakers", quantity: 1 }
-    ]
-  },
+  // Removed the first EXPRESS trip (EXP-1234)
   {
     id: "EXP-5678",
     type: "EXPRESS",
@@ -87,23 +72,7 @@ export const trips: Trip[] = [
       { category: "Bottom Wear", name: "Trousers", quantity: 1 }
     ]
   },
-  {
-    id: "STD-4567",
-    type: "STANDARD",
-    serviceType: "Standard Wash",
-    customerName: "Sparkle Laundry",
-    phoneNumber: "+91 9812345670",
-    address: "Shop No. 7, Ameerpet Main Road, Ameerpet, Hyderabad, Telangana",
-    distance: 7.5,
-    action: "PICKUP",
-    estimatedWeight: 8.0,
-    items: [
-      { category: "Upper Wear", name: "Shirt", quantity: 5 },
-      { category: "Bottom Wear", name: "Pants", quantity: 4 },
-      { category: "Upper Wear", name: "T-Shirt", quantity: 6 },
-      { category: "Shoe Cleaning", name: "Formal Shoes", quantity: 2 }
-    ]
-  },
+  // Removed the first STANDARD trip (STD-4567)
   {
     id: "STD-8901",
     type: "STANDARD",
