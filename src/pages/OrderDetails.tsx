@@ -65,7 +65,7 @@ const OrderDetails = () => {
       const dropTrip = {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, // Create a new ID with DROP prefix
-        action: 'DROP',
+        action: "DROP" as "PICKUP" | "DROP" | "COLLECT", // Fixed the type issue
         status: 'DROP',
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",

@@ -16,13 +16,15 @@ interface ClothesSectionProps {
   onAddClothes: () => void;
   onEditItem?: (item: ClothingItem) => void;
   onDeleteItem?: (item: ClothingItem) => void;
+  isReadOnly?: boolean;
 }
 
 const ClothesSection = ({
   items,
   onAddClothes,
   onEditItem,
-  onDeleteItem
+  onDeleteItem,
+  isReadOnly = false
 }: ClothesSectionProps) => {
   // Function to get the appropriate icon based on the item name
   const getItemIcon = (itemName: string) => {
@@ -72,53 +74,61 @@ const ClothesSection = ({
                   </div>
                   <div className="flex items-center">
                     <span className="text-gray-600 mr-2">x{item.quantity}</span>
-                    <div className="flex space-x-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6" 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (onEditItem) onEditItem(item);
-                        }}
-                      >
-                        <Edit size={14} className="text-blue-500" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6" 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (onDeleteItem) onDeleteItem(item);
-                        }}
-                      >
-                        <Trash2 size={14} className="text-red-500" />
-                      </Button>
-                    </div>
+                    {!isReadOnly && (
+                      <div className="flex space-x-1">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-6 w-6" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (onEditItem) onEditItem(item);
+                          }}
+                        >
+                          <Edit size={14} className="text-blue-500" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-6 w-6" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (onDeleteItem) onDeleteItem(item);
+                          }}
+                        >
+                          <Trash2 size={14} className="text-red-500" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </ContextMenuTrigger>
-              <ContextMenuContent className="bg-white">
-                <ContextMenuItem 
-                  className="flex items-center cursor-pointer" 
-                  onClick={() => onEditItem && onEditItem(item)}
-                >
-                  <Edit size={14} className="mr-2 text-blue-500" />
-                  <span>Edit</span>
-                </ContextMenuItem>
-                <ContextMenuItem 
-                  className="flex items-center cursor-pointer" 
-                  onClick={() => onDeleteItem && onDeleteItem(item)}
-                >
-                  <Trash2 size={14} className="mr-2 text-red-500" />
-                  <span>Delete</span>
-                </ContextMenuItem>
-              </ContextMenuContent>
+              {!isReadOnly && (
+                <ContextMenuContent className="bg-white">
+                  <ContextMenuItem 
+                    className="flex items-center cursor-pointer" 
+                    onClick={() => onEditItem && onEditItem(item)}
+                  >
+                    <Edit size={14} className="mr-2 text-blue-500" />
+                    <span>Edit</span>
+                  </ContextMenuItem>
+                  <ContextMenuItem 
+                    className="flex items-center cursor-pointer" 
+                    onClick={() => onDeleteItem && onDeleteItem(item)}
+                  >
+                    <Trash2 size={14} className="mr-2 text-red-500" />
+                    <span>Delete</span>
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              )}
             </ContextMenu>
           ))}
         </div>}
-      <button onClick={onAddClothes} className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center text-gray-600">
+      <button 
+        onClick={onAddClothes} 
+        className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center text-gray-600"
+        disabled={isReadOnly}
+      >
         <Plus size={16} className="mr-1" />
         Add Clothes
       </button>
