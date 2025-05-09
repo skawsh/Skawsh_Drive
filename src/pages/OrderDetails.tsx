@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import AddClothesDialog from '../components/AddClothesDialog';
 import WeightDetailsSection from '../components/order-details/WeightDetailsSection';
 import ClothesSection from '../components/order-details/ClothesSection';
+import ClothingItemsList from '../components/order-details/ClothingItemsList';
 import OrderPhotosSection from '../components/order-details/OrderPhotosSection';
 import ActionButtons from '../components/order-details/ActionButtons';
 import ServicesSectionHeader from '../components/order-details/ServicesSectionHeader';
@@ -142,6 +143,8 @@ const OrderDetails = () => {
               onAddClothes={() => setIsAddClothesOpen(true)} 
             />
           </div>
+          
+          <ClothingItemsList items={items} />
           
           <OrderPhotosSection />
         </div>
