@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
@@ -10,6 +10,7 @@ import ClothingItemsList from '../components/order-details/ClothingItemsList';
 import OrderPhotosSection from '../components/order-details/OrderPhotosSection';
 import ActionButtons from '../components/order-details/ActionButtons';
 import ServicesSectionHeader from '../components/order-details/ServicesSectionHeader';
+import { useToast } from "@/hooks/use-toast";
 
 interface ClothingItem {
   name: string;
@@ -19,6 +20,7 @@ interface ClothingItem {
 const OrderDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const trip = trips.find(t => t.id === id);
   
   const [actualWeight, setActualWeight] = useState<string>('');
@@ -42,6 +44,31 @@ const OrderDetails = () => {
         }, {} as Record<string, ClothingItem[]>)
       : {}
   );
+
+  // New state to track if changes have been made and saved
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [changesSaved, setChangesSaved] = useState(false);
+  
+  // Track if we should show buttons
+  const [showSaveButton, setShowSaveButton] = useState(false);
+  const [showCompleteButton, setShowCompleteButton] = useState(false);
+
+  // Effect to detect changes
+  useEffect(() => {
+    // If weight is added or clothes are added, show save button
+    const hasWeight = actualWeight !== '';
+    const hasClothes = Object.keys(items).length > 0;
+    
+    if (hasWeight || hasClothes) {
+      setHasUnsavedChanges(true);
+      setShowSaveButton(true);
+      // Hide complete button until changes are saved
+      setShowCompleteButton(false);
+    } else {
+      setHasUnsavedChanges(false);
+      setShowSaveButton(false);
+    }
+  }, [actualWeight, items]);
   
   if (!trip) {
     return (
@@ -77,6 +104,7 @@ const OrderDetails = () => {
     });
     
     setItems(updatedItems);
+    setHasUnsavedChanges(true);
   };
 
   const getCategoryForItem = (itemName: string): string => {
@@ -95,15 +123,34 @@ const OrderDetails = () => {
   };
 
   const handleWeightConfirm = () => {
-    alert(`Weight confirmed: ${actualWeight} kg`);
+    setShowSaveButton(true);
+    toast({
+      title: "Weight confirmed",
+      description: `Actual weight set to ${actualWeight} KG`,
+    });
   };
 
   const handleCompletePickup = () => {
+    toast({
+      title: "Pickup completed",
+      description: "Order has been successfully completed",
+      variant: "success",
+    });
     navigate('/');
   };
 
   const handleSaveChanges = () => {
-    alert('Changes saved successfully');
+    toast({
+      title: "Changes saved",
+      description: "Order details have been updated",
+      variant: "success",
+    });
+    
+    setChangesSaved(true);
+    setHasUnsavedChanges(false);
+    
+    setShowSaveButton(false);
+    setShowCompleteButton(true);
   };
 
   const hasNoWeight = actualWeight === '';
@@ -154,6 +201,8 @@ const OrderDetails = () => {
           onSaveChanges={handleSaveChanges} 
           onCompletePickup={handleCompletePickup}
           saveDisabled={isSaveDisabled}
+          showSaveButton={showSaveButton}
+          showCompleteButton={showCompleteButton}
         />
       </div>
       
