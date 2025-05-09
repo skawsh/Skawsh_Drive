@@ -1,21 +1,28 @@
 
 import React from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2, Edit } from 'lucide-react';
 import { Shirt, Type, Pencil, Footprints, BookOpen } from 'lucide-react';
-
-interface ClothingItem {
-  name: string;
-  quantity: number;
-}
+import { Button } from '../ui/button';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "../ui/context-menu";
+import { ClothingItem } from '../../utils/orderUtils';
 
 interface ClothesSectionProps {
   items: Record<string, ClothingItem[]>;
   onAddClothes: () => void;
+  onEditItem?: (item: ClothingItem) => void;
+  onDeleteItem?: (item: ClothingItem) => void;
 }
 
 const ClothesSection = ({
   items,
-  onAddClothes
+  onAddClothes,
+  onEditItem,
+  onDeleteItem
 }: ClothesSectionProps) => {
   // Function to get the appropriate icon based on the item name
   const getItemIcon = (itemName: string) => {
@@ -56,13 +63,59 @@ const ClothesSection = ({
           <span>No clothes selected</span>
         </div> : <div className="mb-3 space-y-2">
           {allItems.map((item, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center">
-                {getItemIcon(item.name)}
-                <span className="ml-2 text-gray-700">{item.name}</span>
-              </div>
-              <span className="text-gray-600">x{item.quantity}</span>
-            </div>
+            <ContextMenu key={index}>
+              <ContextMenuTrigger>
+                <div className="flex items-center justify-between hover:bg-gray-50 p-1 rounded cursor-pointer group">
+                  <div className="flex items-center">
+                    {getItemIcon(item.name)}
+                    <span className="ml-2 text-gray-700">{item.name}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-gray-600 mr-2">x{item.quantity}</span>
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onEditItem) onEditItem(item);
+                        }}
+                      >
+                        <Edit size={14} className="text-blue-500" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onDeleteItem) onDeleteItem(item);
+                        }}
+                      >
+                        <Trash2 size={14} className="text-red-500" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </ContextMenuTrigger>
+              <ContextMenuContent className="bg-white">
+                <ContextMenuItem 
+                  className="flex items-center cursor-pointer" 
+                  onClick={() => onEditItem && onEditItem(item)}
+                >
+                  <Edit size={14} className="mr-2 text-blue-500" />
+                  <span>Edit</span>
+                </ContextMenuItem>
+                <ContextMenuItem 
+                  className="flex items-center cursor-pointer" 
+                  onClick={() => onDeleteItem && onDeleteItem(item)}
+                >
+                  <Trash2 size={14} className="mr-2 text-red-500" />
+                  <span>Delete</span>
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ))}
         </div>}
       <button onClick={onAddClothes} className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center text-gray-600">

@@ -14,6 +14,8 @@ interface OrderContentProps {
   items: Record<string, ClothingItem[]>;
   onWeightConfirm: () => void;
   onAddClothes: () => void;
+  onEditClothingItem?: (item: ClothingItem) => void;
+  onDeleteClothingItem?: (item: ClothingItem) => void;
 }
 
 const OrderContent: React.FC<OrderContentProps> = ({ 
@@ -22,7 +24,9 @@ const OrderContent: React.FC<OrderContentProps> = ({
   setActualWeight, 
   items, 
   onWeightConfirm, 
-  onAddClothes 
+  onAddClothes,
+  onEditClothingItem,
+  onDeleteClothingItem
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-5">
@@ -41,7 +45,9 @@ const OrderContent: React.FC<OrderContentProps> = ({
         
         <ClothesSection 
           items={items} 
-          onAddClothes={onAddClothes} 
+          onAddClothes={onAddClothes}
+          onEditItem={onEditClothingItem}
+          onDeleteItem={onDeleteClothingItem} 
         />
       </div>
       
