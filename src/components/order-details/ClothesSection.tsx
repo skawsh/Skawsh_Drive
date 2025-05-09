@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Shirt, Type, Pencil, Footprints, BookOpen } from 'lucide-react';
@@ -49,7 +50,15 @@ const ClothesSection = ({
           <span className="mr-2">⬦</span>
           <span>No clothes selected</span>
         </div> : <div className="mb-3 space-y-2">
-          {allItems.map((item, index) => {})}
+          {allItems.map((item, index) => (
+            <div key={index} className="flex items-center justify-between">
+              <div className="flex items-center">
+                {getItemIcon(item.name)}
+                <span className="ml-2 text-gray-700">{item.name}</span>
+              </div>
+              <span className="text-gray-600">x{item.quantity}</span>
+            </div>
+          ))}
         </div>}
       <button onClick={onAddClothes} className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center text-gray-600">
         <Plus size={16} className="mr-1" />
