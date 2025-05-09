@@ -4,14 +4,16 @@ import React from 'react';
 interface ActionButtonsProps {
   onSaveChanges: () => void;
   onCompletePickup: () => void;
+  saveDisabled?: boolean;
 }
 
-const ActionButtons = ({ onSaveChanges, onCompletePickup }: ActionButtonsProps) => {
+const ActionButtons = ({ onSaveChanges, onCompletePickup, saveDisabled = false }: ActionButtonsProps) => {
   return (
     <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 p-4 flex gap-3 shadow-lg">
       <button
         onClick={onSaveChanges}
-        className="flex-1 py-3 bg-laundry-purple text-white rounded-md font-medium"
+        disabled={saveDisabled}
+        className={`flex-1 py-3 ${saveDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-laundry-purple'} text-white rounded-md font-medium`}
       >
         Save Changes
       </button>

@@ -109,6 +109,9 @@ const OrderDetails = () => {
     alert('Changes saved successfully');
   };
 
+  // Determine if the Save Changes button should be disabled
+  const isSaveDisabled = actualWeight === '' && Object.keys(items).length === 0;
+
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
       <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-sm">
@@ -151,7 +154,8 @@ const OrderDetails = () => {
         
         <ActionButtons 
           onSaveChanges={handleSaveChanges} 
-          onCompletePickup={handleCompletePickup} 
+          onCompletePickup={handleCompletePickup}
+          saveDisabled={isSaveDisabled}
         />
       </div>
       
