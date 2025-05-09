@@ -54,8 +54,6 @@ const OrderContent: React.FC<OrderContentProps> = ({
         />
       </div>
       
-      <ClothingItemsList items={items} />
-      
       {/* Dry Cleaning Service */}
       <DryCleaningService />
       
