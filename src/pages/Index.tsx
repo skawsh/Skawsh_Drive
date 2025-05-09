@@ -8,7 +8,10 @@ import TripTypeToggle from '../components/TripTypeToggle';
 const Index = () => {
   const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
-  const filteredTrips = trips.filter(trip => trip.type === activeType);
+  // Filter active trips only (not completed and not in history)
+  const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
+  const filteredTrips = activeTrips.filter(trip => trip.type === activeType);
+  
   const pickupTrips = filteredTrips.filter(trip => trip.action === "PICKUP" && trip.status === "PICKUP");
   const collectTrips = filteredTrips.filter(trip => trip.action === "COLLECT" && trip.status === "PICKUP");
   const dropTrips = filteredTrips.filter(trip => trip.status === "DROP");
@@ -72,3 +75,4 @@ const Index = () => {
 };
 
 export default Index;
+

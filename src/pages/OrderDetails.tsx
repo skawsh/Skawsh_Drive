@@ -60,8 +60,15 @@ const OrderDetails = () => {
   const completePickupWithNavigation = () => {
     handleCompletePickup();
     
-    // Create a drop trip in the trips array
-    if (trip && trip.status !== 'DROP') {
+    // If this is a pickup trip, create a drop trip and mark the pickup as completed
+    if (trip && trip.action === 'PICKUP' && trip.status !== 'DROP') {
+      // First, mark the original pickup trip as completed
+      const pickupIndex = trips.findIndex(t => t.id === id);
+      if (pickupIndex !== -1) {
+        trips[pickupIndex].status = "COMPLETED" as "PICKUP" | "DROP" | "COMPLETED";
+      }
+      
+      // Create a new drop trip
       const dropTrip = {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, // Create a new ID with DROP prefix
