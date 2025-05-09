@@ -66,7 +66,7 @@ const OrderDetails = () => {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, // Create a new ID with DROP prefix
         action: "DROP" as "PICKUP" | "DROP" | "COLLECT", // Fixed the type issue
-        status: 'DROP',
+        status: "DROP" as "PICKUP" | "DROP" | "COMPLETED", // Fixed the status type
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
         studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
