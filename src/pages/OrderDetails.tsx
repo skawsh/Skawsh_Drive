@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
@@ -139,6 +140,15 @@ const OrderDetails = () => {
   };
 
   const handleSaveChanges = () => {
+    // Check if actual weight is empty
+    if (actualWeight === '') {
+      toast({
+        title: "Action required",
+        description: "Please add actual weight before saving changes",
+      });
+      return;
+    }
+    
     toast({
       title: "Changes saved",
       description: "Order details have been updated",
