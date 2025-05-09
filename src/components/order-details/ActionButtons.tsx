@@ -13,7 +13,11 @@ const ActionButtons = ({ onSaveChanges, onCompletePickup, saveDisabled = false }
       <button
         onClick={onSaveChanges}
         disabled={saveDisabled}
-        className={`flex-1 py-3 ${saveDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-laundry-purple'} text-white rounded-md font-medium`}
+        className={`flex-1 py-3 rounded-md font-medium ${
+          saveDisabled 
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+            : 'bg-laundry-purple text-white'
+        }`}
       >
         Save Changes
       </button>

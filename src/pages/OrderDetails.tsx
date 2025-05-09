@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
@@ -81,7 +80,6 @@ const OrderDetails = () => {
   };
 
   const getCategoryForItem = (itemName: string): string => {
-    // Simple logic to categorize items - in a real app this would be more sophisticated
     const itemNameLower = itemName.toLowerCase();
     if (itemNameLower.includes('shoe') || itemNameLower.includes('sneaker')) {
       return 'Shoe Cleaning';
@@ -97,7 +95,6 @@ const OrderDetails = () => {
   };
 
   const handleWeightConfirm = () => {
-    // In a real app, this would save the weight to the trip data
     alert(`Weight confirmed: ${actualWeight} kg`);
   };
 
@@ -106,14 +103,12 @@ const OrderDetails = () => {
   };
 
   const handleSaveChanges = () => {
-    // In a real app, this would save all changes to the trip data
     alert('Changes saved successfully');
   };
 
-  // Define isSaveDisabled to be true when both conditions are met:
-  // 1. No actual weight entered (actualWeight is empty)
-  // 2. No clothes added (no categories in items)
-  const isSaveDisabled = actualWeight === '' && Object.keys(items).length === 0;
+  const hasNoWeight = actualWeight === '';
+  const hasNoClothes = Object.keys(items).length === 0;
+  const isSaveDisabled = hasNoWeight && hasNoClothes;
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
