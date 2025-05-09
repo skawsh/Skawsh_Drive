@@ -109,8 +109,13 @@ const OrderDetails = () => {
     alert('Changes saved successfully');
   };
 
-  // Determine if the Save Changes button should be disabled
+  // Fix the condition - button should be disabled if BOTH conditions are true
+  // Enable the button if either actualWeight is entered OR items are added
   const isSaveDisabled = actualWeight === '' && Object.keys(items).length === 0;
+
+  console.log('Actual weight:', actualWeight);
+  console.log('Items count:', Object.keys(items).length);
+  console.log('Save disabled:', isSaveDisabled);
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
