@@ -2,14 +2,17 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Shirt, Type, Pencil, Footprints, BookOpen } from 'lucide-react';
+
 interface ClothingItem {
   name: string;
   quantity: number;
 }
+
 interface ClothesSectionProps {
   items: Record<string, ClothingItem[]>;
   onAddClothes: () => void;
 }
+
 const ClothesSection = ({
   items,
   onAddClothes
@@ -43,7 +46,9 @@ const ClothesSection = ({
     });
     return allItems;
   };
+  
   const allItems = getAllItems();
+  
   return <div className="ml-4 mb-3">
       <p className="text-sm font-medium text-gray-700 mb-2">Clothes Selected</p>
       {Object.keys(items).length === 0 ? <div className="flex items-center text-gray-400 mb-2">
@@ -66,4 +71,5 @@ const ClothesSection = ({
       </button>
     </div>;
 };
+
 export default ClothesSection;
