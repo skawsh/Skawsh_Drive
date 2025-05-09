@@ -134,7 +134,6 @@ const OrderDetails = () => {
     toast({
       title: "Pickup completed",
       description: "Order has been successfully completed",
-      variant: "success",
     });
     navigate('/');
   };
@@ -143,7 +142,6 @@ const OrderDetails = () => {
     toast({
       title: "Changes saved",
       description: "Order details have been updated",
-      variant: "success",
     });
     
     setChangesSaved(true);
