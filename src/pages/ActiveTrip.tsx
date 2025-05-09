@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import { MapPin, ArrowLeft } from 'lucide-react';
+import NavBar from '../components/NavBar';
 
 const ActiveTrip = () => {
   const { id } = useParams<{ id: string }>();
@@ -80,6 +81,8 @@ const ActiveTrip = () => {
           </button>
         </div>
       </div>
+      
+      <NavBar />
     </div>
   );
 };
