@@ -15,10 +15,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
     navigate(`/active-trip/${trip.id}`);
   };
 
-  const buttonText = `Start ${trip.action === 'PICKUP' ? 'Pick up' : 'Collect'}`;
-  
   // Determine if this is a pickup or collect trip
   const isPickup = trip.action === 'PICKUP';
+  const buttonText = `Start ${isPickup ? 'Pick up' : 'Collect'}`;
 
   return (
     <div className="bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100">
