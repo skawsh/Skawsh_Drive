@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
@@ -11,81 +11,40 @@ import ClothingItemsList from '../components/order-details/ClothingItemsList';
 import OrderPhotosSection from '../components/order-details/OrderPhotosSection';
 import ActionButtons from '../components/order-details/ActionButtons';
 import ServicesSectionHeader from '../components/order-details/ServicesSectionHeader';
-import { useToast } from "@/hooks/use-toast";
-
-interface ClothingItem {
-  name: string;
-  quantity: number;
-}
+import OrderNotFound from '../components/order-details/OrderNotFound';
+import { processTripItems } from '../utils/orderUtils';
+import useOrderState from '../components/order-details/useOrderState';
 
 const OrderDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const trip = trips.find(t => t.id === id);
-  
-  const [actualWeight, setActualWeight] = useState<string>('');
   const [isAddClothesOpen, setIsAddClothesOpen] = useState(false);
-  const [items, setItems] = useState<Record<string, ClothingItem[]>>(
-    trip?.items
-      ? trip.items.reduce((acc, item) => {
-          if (!acc[item.category]) {
-            acc[item.category] = [];
-          }
-          
-          const existingItemIndex = acc[item.category].findIndex(i => i.name === item.name);
-          
-          if (existingItemIndex >= 0) {
-            acc[item.category][existingItemIndex].quantity += item.quantity;
-          } else {
-            acc[item.category].push({ name: item.name, quantity: item.quantity });
-          }
-          
-          return acc;
-        }, {} as Record<string, ClothingItem[]>)
-      : {}
-  );
-
-  // New state to track if changes have been made and saved
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [changesSaved, setChangesSaved] = useState(false);
   
-  // Track if we should show buttons
-  const [showSaveButton, setShowSaveButton] = useState(false);
-  const [showCompleteButton, setShowCompleteButton] = useState(false);
-
-  // Effect to detect changes
-  useEffect(() => {
-    // If weight is added or clothes are added, show save button
-    const hasWeight = actualWeight !== '';
-    const hasClothes = Object.keys(items).length > 0;
-    
-    if (hasWeight || hasClothes) {
-      setHasUnsavedChanges(true);
-      setShowSaveButton(true);
-      // Hide complete button until changes are saved
-      setShowCompleteButton(false);
-    } else {
-      setHasUnsavedChanges(false);
-      setShowSaveButton(false);
-    }
-  }, [actualWeight, items]);
-  
+  // If trip not found, show not found component
   if (!trip) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4">
-        <p className="text-lg text-gray-600">Trip not found</p>
-        <button 
-          onClick={() => navigate('/')}
-          className="mt-4 px-4 py-2 bg-laundry-primary text-white rounded-md"
-        >
-          Return to Dashboard
-        </button>
-      </div>
-    );
+    return <OrderNotFound />;
   }
 
-  const handleAddItems = (newItems: ClothingItem[]) => {
+  // Process initial items from trip data
+  const initialItems = processTripItems(trip.items);
+  
+  // Use order state hook
+  const {
+    actualWeight,
+    setActualWeight,
+    items,
+    setItems,
+    showSaveButton,
+    showCompleteButton,
+    handleWeightConfirm,
+    handleSaveChanges,
+    handleCompletePickup,
+    isSaveDisabled,
+  } = useOrderState({ initialItems });
+
+  // Handle adding items (forwarding to the order state)
+  const handleAddItems = (newItems: { name: string; quantity: number }[]) => {
     const updatedItems = { ...items };
     
     newItems.forEach(item => {
@@ -105,9 +64,9 @@ const OrderDetails = () => {
     });
     
     setItems(updatedItems);
-    setHasUnsavedChanges(true);
   };
 
+  // Function to determine the category for an item based on its name
   const getCategoryForItem = (itemName: string): string => {
     const itemNameLower = itemName.toLowerCase();
     if (itemNameLower.includes('shoe') || itemNameLower.includes('sneaker')) {
@@ -123,47 +82,11 @@ const OrderDetails = () => {
     return 'Upper Wear';
   };
 
-  const handleWeightConfirm = () => {
-    setShowSaveButton(true);
-    toast({
-      title: "Weight confirmed",
-      description: `Actual weight set to ${actualWeight} KG`,
-    });
-  };
-
-  const handleCompletePickup = () => {
-    toast({
-      title: "Pickup completed",
-      description: "Order has been successfully completed",
-    });
+  // Handle complete pickup with navigation
+  const completePickupWithNavigation = () => {
+    handleCompletePickup();
     navigate('/');
   };
-
-  const handleSaveChanges = () => {
-    // Check if actual weight is empty
-    if (actualWeight === '') {
-      toast({
-        title: "Action required",
-        description: "Please add actual weight before saving changes",
-      });
-      return;
-    }
-    
-    toast({
-      title: "Changes saved",
-      description: "Order details have been updated",
-    });
-    
-    setChangesSaved(true);
-    setHasUnsavedChanges(false);
-    
-    setShowSaveButton(false);
-    setShowCompleteButton(true);
-  };
-
-  const hasNoWeight = actualWeight === '';
-  const hasNoClothes = Object.keys(items).length === 0;
-  const isSaveDisabled = hasNoWeight && hasNoClothes;
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
@@ -207,7 +130,7 @@ const OrderDetails = () => {
         
         <ActionButtons 
           onSaveChanges={handleSaveChanges} 
-          onCompletePickup={handleCompletePickup}
+          onCompletePickup={completePickupWithNavigation}
           saveDisabled={isSaveDisabled}
           showSaveButton={showSaveButton}
           showCompleteButton={showCompleteButton}
