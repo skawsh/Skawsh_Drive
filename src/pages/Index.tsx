@@ -6,11 +6,9 @@ import TripCard from '../components/TripCard';
 import TripTypeToggle from '../components/TripTypeToggle';
 
 const Index = () => {
-  const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD" | "ALL">("ALL");
+  const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
-  const filteredTrips = activeType === "ALL" 
-    ? trips 
-    : trips.filter(trip => trip.type === activeType);
+  const filteredTrips = trips.filter(trip => trip.type === activeType);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
