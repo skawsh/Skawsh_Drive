@@ -5,6 +5,8 @@ import ClothesSection from './ClothesSection';
 import ClothingItemsList from './ClothingItemsList';
 import OrderPhotosSection from './OrderPhotosSection';
 import ServicesSectionHeader from './ServicesSectionHeader';
+import DryCleaningService from './DryCleaningService';
+import ShoeCleaningService from './ShoeCleaningService';
 import { ClothingItem } from '../../utils/orderUtils';
 
 interface OrderContentProps {
@@ -32,7 +34,8 @@ const OrderContent: React.FC<OrderContentProps> = ({
     <div className="bg-white rounded-lg shadow-md p-5">
       <ServicesSectionHeader />
       
-      <div className="mb-4">
+      {/* Core Laundry Service */}
+      <div className="mb-6">
         <p className="font-medium mb-1">Core Laundry Service</p>
         <p className="text-gray-600 ml-2 mb-3">Wash and Fold</p>
         
@@ -52,6 +55,12 @@ const OrderContent: React.FC<OrderContentProps> = ({
       </div>
       
       <ClothingItemsList items={items} />
+      
+      {/* Dry Cleaning Service */}
+      <DryCleaningService />
+      
+      {/* Shoe Cleaning Service */}
+      <ShoeCleaningService />
       
       <OrderPhotosSection />
     </div>
