@@ -81,6 +81,20 @@ const OrderDetails = () => {
         description: "A new drop-off trip has been created",
       });
     }
+    // If this is a drop trip, mark it as completed
+    else if (trip && trip.status === 'DROP') {
+      // Find the original trip and mark it as completed
+      const tripIndex = trips.findIndex(t => t.id === id);
+      if (tripIndex !== -1) {
+        trips[tripIndex].status = "COMPLETED" as "PICKUP" | "DROP" | "COMPLETED";
+      }
+      
+      // Show success toast
+      toast({
+        title: "Drop-off completed",
+        description: "Order has been moved to history",
+      });
+    }
     
     navigate('/');
   };
@@ -107,7 +121,7 @@ const OrderDetails = () => {
           onCompletePickup={completePickupWithNavigation}
           saveDisabled={isSaveDisabled}
           showSaveButton={showSaveButton && !isDrop}
-          showCompleteButton={showCompleteButton && !isDrop}
+          showCompleteButton={showCompleteButton || isDrop}
         />
       </div>
       
