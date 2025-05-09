@@ -4,6 +4,8 @@ import { Check, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface WeightDetailsSectionProps {
   estimatedWeight: string | number;
@@ -80,36 +82,56 @@ const WeightDetailsSection = ({
   };
 
   return (
-    <div className="ml-4 mb-3">
-      <p className="text-sm font-medium text-gray-700 mb-2">Weight Details</p>
-      
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-gray-600">Estimated Weight</span>
-        <span className="font-medium">{estimatedWeight} KG</span>
-      </div>
-      
-      <div className="flex items-center">
-        <div className="flex-1">
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Actual Weight *</span>
+    <Card className="mb-4 p-4 border border-gray-100">
+      <div className="space-y-3">
+        <div className="flex justify-between items-center">
+          <p className="font-medium text-gray-800">Weight Details</p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-500 mb-1">Estimated Weight</p>
+            <p className="text-sm font-medium">{estimatedWeight} KG</p>
           </div>
-          <div className="flex items-center">
-            <Input
-              type="text"
-              value={actualWeight}
-              onChange={(e) => validateAndSetWeight(e.target.value)}
-              placeholder="Enter KG"
-              className={`flex-1 px-3 py-2 border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none`}
-            />
-            <span className="mx-2 text-gray-500">KG</span>
-            <button
+          
+          <div className="bg-green-50 p-3 rounded-lg">
+            <p className="text-xs text-gray-500 mb-1">Actual Weight</p>
+            <p className="text-sm font-medium">
+              {actualWeight ? `${actualWeight} KG` : '—'}
+            </p>
+          </div>
+        </div>
+        
+        <div>
+          <div className="flex justify-between items-center mb-1">
+            <p className="text-sm text-gray-600">Enter Actual Weight</p>
+            <p className="text-xs text-gray-400">(Required)</p>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <div className="relative flex-grow">
+              <Input
+                type="text"
+                value={actualWeight}
+                onChange={(e) => validateAndSetWeight(e.target.value)}
+                placeholder="0.00"
+                className={`pr-9 ${error ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                KG
+              </span>
+            </div>
+            
+            <Button
               onClick={handleConfirm}
               disabled={!!error || actualWeight === ''}
-              className={`p-2 ${error || actualWeight === '' ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600'} text-white rounded-md transition-colors`}
+              className="bg-green-500 hover:bg-green-600"
+              size="icon"
             >
-              <Check size={18} />
-            </button>
+              <Check size={16} />
+            </Button>
           </div>
+          
           {error && (
             <Alert variant="destructive" className="mt-2 py-2 px-3">
               <AlertCircle className="h-4 w-4" />
@@ -118,7 +140,7 @@ const WeightDetailsSection = ({
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
