@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Shirt, TShirt, Jeans, FormalShoes, Sneakers, Heels } from 'lucide-react';
 
 interface ClothingItem {
   name: string;
@@ -15,23 +16,75 @@ const ClothingItemsList = ({ items }: ClothingItemsListProps) => {
     return null;
   }
 
+  // Function to get the appropriate icon based on the item name
+  const getItemIcon = (itemName: string) => {
+    const name = itemName.toLowerCase();
+    
+    if (name.includes('shirt') && !name.includes('t-shirt')) {
+      return <Shirt size={16} className="text-indigo-400" />;
+    } else if (name.includes('t-shirt') || name.includes('tshirt') || name.includes('t shirt')) {
+      return <TShirt size={16} className="text-indigo-400" />;
+    } else if (name.includes('jeans')) {
+      return <Jeans size={16} className="text-indigo-400" />;
+    } else if (name.includes('formal') && name.includes('shoe')) {
+      return <FormalShoes size={16} className="text-indigo-400" />;
+    } else if (name.includes('sneaker')) {
+      return <Sneakers size={16} className="text-indigo-400" />;
+    } else if (name.includes('heel')) {
+      return <Heels size={16} className="text-indigo-400" />;
+    }
+    
+    // Default fallback
+    return <Shirt size={16} className="text-indigo-400" />;
+  };
+
+  // Group items by service category (Dry Cleaning, Shoe Cleaning)
+  const groupItemsByService = () => {
+    const serviceGroups: Record<string, Record<string, ClothingItem[]>> = {};
+    
+    Object.entries(items).forEach(([category, categoryItems]) => {
+      if (category.toLowerCase().includes('shoe')) {
+        if (!serviceGroups['Shoe Cleaning']) {
+          serviceGroups['Shoe Cleaning'] = {};
+        }
+        serviceGroups['Shoe Cleaning'][category] = categoryItems;
+      } else {
+        if (!serviceGroups['Dry Cleaning']) {
+          serviceGroups['Dry Cleaning'] = {};
+        }
+        serviceGroups['Dry Cleaning'][category] = categoryItems;
+      }
+    });
+    
+    return serviceGroups;
+  };
+
+  const serviceGroups = groupItemsByService();
+
   return (
-    <>
-      {Object.entries(items).map(([category, categoryItems]) => (
-        <div key={category} className="mb-4">
-          <p className="font-medium mb-2">{category}</p>
-          <div className="ml-4">
-            {categoryItems.map((item, index) => (
-              <div key={index} className="flex items-center mb-2">
-                <span className="text-indigo-400 mr-2">⬦</span>
-                <span className="flex-1">{item.name}</span>
-                <span className="text-gray-600">x{item.quantity}</span>
+    <div className="mb-6">
+      {Object.entries(serviceGroups).map(([serviceName, categories]) => (
+        <div key={serviceName} className="mb-4">
+          <h3 className="font-semibold text-gray-800 mb-2">{serviceName}</h3>
+          
+          {Object.entries(categories).map(([category, categoryItems]) => (
+            <div key={category} className="mb-3">
+              <p className="text-gray-700 font-medium text-sm mb-1">{category}</p>
+              
+              <div className="space-y-2 pl-2">
+                {categoryItems.map((item, index) => (
+                  <div key={index} className="flex items-center">
+                    {getItemIcon(item.name)}
+                    <span className="ml-2 text-gray-600">{item.name}</span>
+                    <span className="ml-auto text-gray-600">x{item.quantity}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
