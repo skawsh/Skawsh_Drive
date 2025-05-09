@@ -1,3 +1,3 @@
-import { useToast, toast } from "@/hooks/use-toast";
 
-export { useToast, toast };
+// Re-export toast components from hooks directly
+export { useToast, toast } from "@/hooks/use-toast";
