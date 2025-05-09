@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ClothingItem, getCategoryForItem } from '../../utils/orderUtils';
+import { ClothingItem } from '../../utils/orderUtils';
 
 interface OrderItemsManagerProps {
   items: Record<string, ClothingItem[]>;
@@ -8,7 +8,7 @@ interface OrderItemsManagerProps {
 }
 
 const OrderItemsManager: React.FC<OrderItemsManagerProps> = ({ items, setItems }) => {
-  const handleAddItems = (newItems: ClothingItem[]) => {
+  const handleAddItems = (newItems: { name: string; quantity: number }[]) => {
     const updatedItems = { ...items };
     
     newItems.forEach(item => {
@@ -30,9 +30,28 @@ const OrderItemsManager: React.FC<OrderItemsManagerProps> = ({ items, setItems }
     setItems(updatedItems);
   };
 
-  return {
-    handleAddItems
+  // Function to determine the category for an item based on its name
+  const getCategoryForItem = (itemName: string): string => {
+    const itemNameLower = itemName.toLowerCase();
+    if (itemNameLower.includes('shoe') || itemNameLower.includes('sneaker')) {
+      return 'Shoe Cleaning';
+    } else if (
+      itemNameLower.includes('pant') || 
+      itemNameLower.includes('jean') || 
+      itemNameLower.includes('trouser') ||
+      itemNameLower.includes('short')
+    ) {
+      return 'Bottom Wear';
+    }
+    return 'Upper Wear';
   };
+
+  return (
+    <div>
+      {/* This is a UI component that will be used to manage order items */}
+    </div>
+  );
 };
 
 export default OrderItemsManager;
+export { getCategoryForItem };

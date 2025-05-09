@@ -3,17 +3,13 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
-import { ArrowLeft } from 'lucide-react';
 import AddClothesDialog from '../components/AddClothesDialog';
-import WeightDetailsSection from '../components/order-details/WeightDetailsSection';
-import ClothesSection from '../components/order-details/ClothesSection';
-import ClothingItemsList from '../components/order-details/ClothingItemsList';
-import OrderPhotosSection from '../components/order-details/OrderPhotosSection';
 import ActionButtons from '../components/order-details/ActionButtons';
-import ServicesSectionHeader from '../components/order-details/ServicesSectionHeader';
 import OrderNotFound from '../components/order-details/OrderNotFound';
 import { processTripItems } from '../utils/orderUtils';
 import useOrderState from '../components/order-details/useOrderState';
+import OrderHeader from '../components/order-details/OrderHeader';
+import OrderContent from '../components/order-details/OrderContent';
 
 const OrderDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -90,43 +86,17 @@ const OrderDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
-      <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center">
-          <button 
-            onClick={() => navigate(`/trip-details/${id}`)}
-            className="mr-4 p-1"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="text-xl font-bold text-gray-800">Order Details</h1>
-        </div>
-      </div>
+      <OrderHeader id={id!} />
       
       <div className="container mx-auto px-4 pt-20 pb-20">
-        <div className="bg-white rounded-lg shadow-md p-5">
-          <ServicesSectionHeader />
-          
-          <div className="mb-4">
-            <p className="font-medium mb-1">Core Laundry Service</p>
-            <p className="text-gray-600 ml-2 mb-3">Wash and Fold</p>
-            
-            <WeightDetailsSection 
-              estimatedWeight={trip.estimatedWeight} 
-              actualWeight={actualWeight} 
-              setActualWeight={setActualWeight} 
-              onWeightConfirm={handleWeightConfirm} 
-            />
-            
-            <ClothesSection 
-              items={items} 
-              onAddClothes={() => setIsAddClothesOpen(true)} 
-            />
-          </div>
-          
-          <ClothingItemsList items={items} />
-          
-          <OrderPhotosSection />
-        </div>
+        <OrderContent 
+          estimatedWeight={trip.estimatedWeight}
+          actualWeight={actualWeight}
+          setActualWeight={setActualWeight}
+          items={items}
+          onWeightConfirm={handleWeightConfirm}
+          onAddClothes={() => setIsAddClothesOpen(true)}
+        />
         
         <ActionButtons 
           onSaveChanges={handleSaveChanges} 
