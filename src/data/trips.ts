@@ -9,6 +9,9 @@ export interface Trip {
   distance: number;
   action: "PICKUP" | "COLLECT";
   estimatedWeight?: number;
+  studioName?: string;
+  studioPhone?: string;
+  studioAddress?: string;
   items?: {
     category: string;
     name: string;
@@ -57,6 +60,9 @@ export const trips: Trip[] = [
     address: "Apartment 506, Green Valley Apartments, Kondapur, Hyderabad, Telangana",
     distance: 4.8,
     action: "COLLECT",
+    studioName: "Clean Express Studio",
+    studioPhone: "+91 9876543214",
+    studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
     estimatedWeight: 1.5,
     items: [
       { category: "Upper Wear", name: "Blouse", quantity: 2 },
@@ -72,6 +78,9 @@ export const trips: Trip[] = [
     address: "Villa 8, Cyber Pearl Colony, Hitec City, Hyderabad, Telangana",
     distance: 2.9,
     action: "COLLECT",
+    studioName: "Royal Dry Clean Studio",
+    studioPhone: "+91 9871234567",
+    studioAddress: "Plot 45, Jubilee Hills, Hyderabad, Telangana",
     estimatedWeight: 2.0,
     items: [
       { category: "Upper Wear", name: "Formal Shirt", quantity: 2 },
@@ -120,6 +129,9 @@ export const trips: Trip[] = [
     address: "Shop 12, KPHB Colony Main Road, Kukatpally, Hyderabad, Telangana",
     distance: 12.6,
     action: "COLLECT",
+    studioName: "Sparkling Clean Studio",
+    studioPhone: "+91 9876543214",
+    studioAddress: "Madhapur, Hyderabad, India",
     estimatedWeight: 10.0,
     items: [
       { category: "Upper Wear", name: "T-Shirt", quantity: 8 },
@@ -138,6 +150,9 @@ export const trips: Trip[] = [
     address: "Flat 405, Sunshine Apartments, Banjara Hills, Hyderabad, Telangana",
     distance: 6.3,
     action: "COLLECT",
+    studioName: "Fresh Iron Studio",
+    studioPhone: "+91 9888765432",
+    studioAddress: "Shop 34, Ameerpet, Hyderabad, Telangana",
     estimatedWeight: 3.5,
     items: [
       { category: "Upper Wear", name: "Formal Shirt", quantity: 4 },
