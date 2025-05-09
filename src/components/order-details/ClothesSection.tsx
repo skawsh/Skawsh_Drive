@@ -65,14 +65,14 @@ const ClothesSection = ({
           {allItems.map((item, index) => (
             <ContextMenu key={index}>
               <ContextMenuTrigger>
-                <div className="flex items-center justify-between hover:bg-gray-50 p-1 rounded cursor-pointer group">
+                <div className="flex items-center justify-between hover:bg-gray-50 p-1 rounded cursor-pointer">
                   <div className="flex items-center">
                     {getItemIcon(item.name)}
                     <span className="ml-2 text-gray-700">{item.name}</span>
                   </div>
                   <div className="flex items-center">
                     <span className="text-gray-600 mr-2">x{item.quantity}</span>
-                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex space-x-1">
                       <Button 
                         variant="ghost" 
                         size="icon" 
