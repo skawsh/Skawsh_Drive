@@ -1,13 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
-import { MapPin, Clock, FileText, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { MapPin, Clock, FileText, AlertTriangle, ArrowLeft, Check } from 'lucide-react';
+import StudioVerificationDialog from '../components/StudioVerificationDialog';
+import { toast } from "@/components/ui/use-toast";
 
 const TripDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false);
   
   const trip = trips.find(t => t.id === id);
   
@@ -25,6 +28,8 @@ const TripDetails = () => {
     );
   }
 
+  const isDrop = trip.status === 'DROP';
+
   const handleViewOrderDetails = () => {
     navigate(`/order-details/${id}`);
   };
@@ -32,6 +37,19 @@ const TripDetails = () => {
   const handleReportIssue = () => {
     // In a real app, this would open an issue reporting form
     alert('Issue reporting functionality would be implemented here');
+  };
+
+  const handleStartVerification = () => {
+    setIsVerificationDialogOpen(true);
+  };
+
+  const handleCompleteDrop = () => {
+    // In a real app, this would update the status in the database
+    toast({
+      title: "Drop-off completed",
+      description: "The laundry has been successfully dropped off",
+    });
+    navigate('/');
   };
 
   return (
@@ -62,14 +80,27 @@ const TripDetails = () => {
             <h2 className="text-xl font-bold">{trip.serviceType}</h2>
           </div>
           
-          <div className="mb-6">
-            <h3 className="font-semibold text-lg">{trip.customerName}</h3>
-            <p className="text-gray-600">{trip.phoneNumber}</p>
-            <div className="flex items-start mt-2">
-              <MapPin size={18} className="text-gray-500 mr-1 mt-1 flex-shrink-0" />
-              <p className="text-gray-700">{trip.address}</p>
+          {isDrop ? (
+            // Studio information for drop trips
+            <div className="mb-6">
+              <h3 className="font-semibold text-lg">{trip.studioName || "Sparkling Clean Studio"}</h3>
+              <p className="text-gray-600">{trip.studioPhone || "+91 9876543214"}</p>
+              <div className="flex items-start mt-2">
+                <MapPin size={18} className="text-gray-500 mr-1 mt-1 flex-shrink-0" />
+                <p className="text-gray-700">{trip.studioAddress || "Madhapur, Hyderabad, India"}</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            // Customer information for pickup trips
+            <div className="mb-6">
+              <h3 className="font-semibold text-lg">{trip.customerName}</h3>
+              <p className="text-gray-600">{trip.phoneNumber}</p>
+              <div className="flex items-start mt-2">
+                <MapPin size={18} className="text-gray-500 mr-1 mt-1 flex-shrink-0" />
+                <p className="text-gray-700">{trip.address}</p>
+              </div>
+            </div>
+          )}
           
           <div className="space-y-3">
             <button
@@ -79,6 +110,16 @@ const TripDetails = () => {
               <FileText size={18} className="mr-2" />
               View Order Details
             </button>
+            
+            {isDrop && (
+              <button
+                onClick={handleStartVerification}
+                className="w-full py-3 bg-laundry-primary text-white rounded-md font-medium flex items-center justify-center"
+              >
+                <Check size={18} className="mr-2" />
+                Complete Drop
+              </button>
+            )}
             
             <button
               onClick={handleReportIssue}
@@ -92,6 +133,12 @@ const TripDetails = () => {
       </div>
       
       <NavBar />
+      
+      <StudioVerificationDialog 
+        open={isVerificationDialogOpen}
+        onOpenChange={setIsVerificationDialogOpen}
+        onVerificationSuccess={handleCompleteDrop}
+      />
     </div>
   );
 };

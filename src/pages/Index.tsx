@@ -9,8 +9,9 @@ const Index = () => {
   const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
   const filteredTrips = trips.filter(trip => trip.type === activeType);
-  const pickupTrips = filteredTrips.filter(trip => trip.action === "PICKUP");
-  const collectTrips = filteredTrips.filter(trip => trip.action === "COLLECT");
+  const pickupTrips = filteredTrips.filter(trip => trip.action === "PICKUP" && trip.status === "PICKUP");
+  const collectTrips = filteredTrips.filter(trip => trip.action === "COLLECT" && trip.status === "PICKUP");
+  const dropTrips = filteredTrips.filter(trip => trip.status === "DROP");
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
@@ -29,6 +30,17 @@ const Index = () => {
           </div>
         ) : (
           <div>
+            {dropTrips.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-700 mb-3">Drop</h2>
+                <div className="space-y-4">
+                  {dropTrips.map((trip) => (
+                    <TripCard key={trip.id} trip={trip} />
+                  ))}
+                </div>
+              </div>
+            )}
+            
             {pickupTrips.length > 0 && (
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-700 mb-3">Pick up</h2>

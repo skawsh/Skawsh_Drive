@@ -15,9 +15,15 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
     navigate(`/active-trip/${trip.id}`);
   };
 
-  // Determine if this is a pickup or collect trip
+  // Determine if this is a pickup, collect or drop trip
   const isPickup = trip.action === 'PICKUP';
-  const buttonText = `Start ${isPickup ? 'Pick up' : 'Collect'}`;
+  const isCollect = trip.action === 'COLLECT';
+  const isDrop = trip.status === 'DROP';
+  
+  let buttonText = 'Start Trip';
+  if (isPickup) buttonText = 'Start Pick up';
+  if (isCollect) buttonText = 'Start Collect';
+  if (isDrop) buttonText = 'Start Drop';
 
   return (
     <div className="bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100">
@@ -26,13 +32,15 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
           <span className="text-sm font-medium text-laundry-primary">ID: {trip.id}</span>
           <h3 className="font-bold text-gray-800 text-lg">{trip.serviceType}</h3>
         </div>
-        <span className="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full font-medium">
-          {trip.distance} km away
-        </span>
+        {trip.distance && (
+          <span className="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full font-medium">
+            {trip.distance} km away
+          </span>
+        )}
       </div>
       
       <div className="mb-3">
-        {isPickup ? (
+        {(isPickup) ? (
           // Customer information for pickup trips
           <>
             <div className="flex items-center mt-2 text-gray-700">
@@ -49,7 +57,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
             </div>
           </>
         ) : (
-          // Laundry studio information for collect trips
+          // Laundry studio information for collect and drop trips
           <>
             <div className="flex items-center mt-2 text-gray-700">
               <Store size={16} className="text-indigo-400 mr-2" />

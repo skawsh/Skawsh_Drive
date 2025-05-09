@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
+import { toast } from "@/components/ui/use-toast";
 import NavBar from '../components/NavBar';
 import AddClothesDialog from '../components/AddClothesDialog';
 import ActionButtons from '../components/order-details/ActionButtons';
@@ -23,6 +24,9 @@ const OrderDetails = () => {
   if (!trip) {
     return <OrderNotFound />;
   }
+
+  // Check if this is a drop trip
+  const isDrop = trip.status === 'DROP';
 
   // Process initial items from trip data
   const initialItems = processTripItems(trip.items);
@@ -55,6 +59,29 @@ const OrderDetails = () => {
   // Handle complete pickup with navigation
   const completePickupWithNavigation = () => {
     handleCompletePickup();
+    
+    // Create a drop trip in the trips array
+    if (trip && trip.status !== 'DROP') {
+      const dropTrip = {
+        ...trip,
+        id: `DROP-${trip.id.split('-')[1]}`, // Create a new ID with DROP prefix
+        action: 'DROP',
+        status: 'DROP',
+        studioName: "Sparkling Clean Studio",
+        studioPhone: "+91 9876543214",
+        studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
+      };
+      
+      // Add to trips array
+      trips.push(dropTrip);
+      
+      // Show success toast
+      toast({
+        title: "Pickup completed",
+        description: "A new drop-off trip has been created",
+      });
+    }
+    
     navigate('/');
   };
 
@@ -70,34 +97,39 @@ const OrderDetails = () => {
           items={items}
           onWeightConfirm={handleWeightConfirm}
           onAddClothes={() => setIsAddClothesOpen(true)}
-          onEditClothingItem={handleEditClothingItem}
-          onDeleteClothingItem={handleDeleteClothingItem}
+          onEditClothingItem={isDrop ? undefined : handleEditClothingItem}
+          onDeleteClothingItem={isDrop ? undefined : handleDeleteClothingItem}
+          isReadOnly={isDrop}
         />
         
         <ActionButtons 
           onSaveChanges={handleSaveChanges} 
           onCompletePickup={completePickupWithNavigation}
           saveDisabled={isSaveDisabled}
-          showSaveButton={showSaveButton}
-          showCompleteButton={showCompleteButton}
+          showSaveButton={showSaveButton && !isDrop}
+          showCompleteButton={showCompleteButton && !isDrop}
         />
       </div>
       
       <NavBar />
       
-      <AddClothesDialog
-        open={isAddClothesOpen}
-        onOpenChange={setIsAddClothesOpen}
-        onAddItems={handleAddItems}
-      />
-      
-      <EditItemDialog
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-        editingItem={editingItem}
-        onUpdateItemQuantity={handleUpdateItemQuantity}
-        onDeleteItem={handleDeleteClothingItem}
-      />
+      {!isDrop && (
+        <>
+          <AddClothesDialog
+            open={isAddClothesOpen}
+            onOpenChange={setIsAddClothesOpen}
+            onAddItems={handleAddItems}
+          />
+          
+          <EditItemDialog
+            open={isEditDialogOpen}
+            onOpenChange={setIsEditDialogOpen}
+            editingItem={editingItem}
+            onUpdateItemQuantity={handleUpdateItemQuantity}
+            onDeleteItem={handleDeleteClothingItem}
+          />
+        </>
+      )}
     </div>
   );
 };

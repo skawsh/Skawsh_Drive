@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
-import { MapPin, ArrowLeft } from 'lucide-react';
+import { MapPin, ArrowLeft, Store, Phone } from 'lucide-react';
 import NavBar from '../components/NavBar';
 
 const ActiveTrip = () => {
@@ -25,9 +25,12 @@ const ActiveTrip = () => {
     );
   }
 
+  const isDrop = trip.status === 'DROP';
+
   const handleNavigate = () => {
     // In a real app, this would open maps with the address
-    const encodedAddress = encodeURIComponent(trip.address);
+    const address = isDrop ? trip.studioAddress || trip.address : trip.address;
+    const encodedAddress = encodeURIComponent(address);
     window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
   };
 
@@ -57,12 +60,35 @@ const ActiveTrip = () => {
           </div>
           
           <div className="w-full text-center mb-6">
-            <h3 className="font-semibold text-lg">{trip.customerName}</h3>
-            <p className="text-gray-600">{trip.phoneNumber}</p>
-            <div className="flex items-center justify-center mt-2">
-              <MapPin size={18} className="text-gray-500 mr-1" />
-              <p className="text-gray-700">{trip.address}</p>
-            </div>
+            {isDrop ? (
+              // Studio information for drop trips
+              <>
+                <h3 className="font-semibold text-lg flex items-center justify-center">
+                  <Store size={18} className="mr-2" />
+                  {trip.studioName || "Sparkling Clean Studio"}
+                </h3>
+                <p className="text-gray-600 flex items-center justify-center mt-2">
+                  <Phone size={18} className="mr-2" />
+                  {trip.studioPhone || "+91 9876543214"}
+                </p>
+                <div className="flex items-center justify-center mt-2">
+                  <MapPin size={18} className="text-gray-500 mr-1" />
+                  <p className="text-gray-700">
+                    {trip.studioAddress || "Madhapur, Hyderabad, India"}
+                  </p>
+                </div>
+              </>
+            ) : (
+              // Customer information for pickup trips
+              <>
+                <h3 className="font-semibold text-lg">{trip.customerName}</h3>
+                <p className="text-gray-600">{trip.phoneNumber}</p>
+                <div className="flex items-center justify-center mt-2">
+                  <MapPin size={18} className="text-gray-500 mr-1" />
+                  <p className="text-gray-700">{trip.address}</p>
+                </div>
+              </>
+            )}
           </div>
           
           <button

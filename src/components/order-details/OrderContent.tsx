@@ -2,7 +2,6 @@
 import React from 'react';
 import WeightDetailsSection from './WeightDetailsSection';
 import ClothesSection from './ClothesSection';
-import ClothingItemsList from './ClothingItemsList';
 import OrderPhotosSection from './OrderPhotosSection';
 import ServicesSectionHeader from './ServicesSectionHeader';
 import DryCleaningService from './DryCleaningService';
@@ -18,6 +17,7 @@ interface OrderContentProps {
   onAddClothes: () => void;
   onEditClothingItem?: (item: ClothingItem) => void;
   onDeleteClothingItem?: (item: ClothingItem) => void;
+  isReadOnly?: boolean;
 }
 
 const OrderContent: React.FC<OrderContentProps> = ({ 
@@ -28,7 +28,8 @@ const OrderContent: React.FC<OrderContentProps> = ({
   onWeightConfirm, 
   onAddClothes,
   onEditClothingItem,
-  onDeleteClothingItem
+  onDeleteClothingItem,
+  isReadOnly = false
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-5">
@@ -44,6 +45,7 @@ const OrderContent: React.FC<OrderContentProps> = ({
           actualWeight={actualWeight} 
           setActualWeight={setActualWeight} 
           onWeightConfirm={onWeightConfirm} 
+          isReadOnly={isReadOnly}
         />
         
         <ClothesSection 
@@ -51,6 +53,7 @@ const OrderContent: React.FC<OrderContentProps> = ({
           onAddClothes={onAddClothes}
           onEditItem={onEditClothingItem}
           onDeleteItem={onDeleteClothingItem} 
+          isReadOnly={isReadOnly}
         />
       </div>
       
