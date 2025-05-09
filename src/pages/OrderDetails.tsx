@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
@@ -109,13 +110,10 @@ const OrderDetails = () => {
     alert('Changes saved successfully');
   };
 
-  // Fix the condition - button should be disabled if BOTH conditions are true
-  // Enable the button if either actualWeight is entered OR items are added
+  // Define isSaveDisabled to be true when both conditions are met:
+  // 1. No actual weight entered (actualWeight is empty)
+  // 2. No clothes added (no categories in items)
   const isSaveDisabled = actualWeight === '' && Object.keys(items).length === 0;
-
-  console.log('Actual weight:', actualWeight);
-  console.log('Items count:', Object.keys(items).length);
-  console.log('Save disabled:', isSaveDisabled);
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
