@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Shirt, TShirt, Jeans, FormalShoes, Sneakers, Heels } from 'lucide-react';
+import { Shirt, Type, Pencil, Footprints, BookOpen } from 'lucide-react';
 
 interface ClothingItem {
   name: string;
@@ -23,15 +23,13 @@ const ClothingItemsList = ({ items }: ClothingItemsListProps) => {
     if (name.includes('shirt') && !name.includes('t-shirt')) {
       return <Shirt size={16} className="text-indigo-400" />;
     } else if (name.includes('t-shirt') || name.includes('tshirt') || name.includes('t shirt')) {
-      return <TShirt size={16} className="text-indigo-400" />;
-    } else if (name.includes('jeans')) {
-      return <Jeans size={16} className="text-indigo-400" />;
-    } else if (name.includes('formal') && name.includes('shoe')) {
-      return <FormalShoes size={16} className="text-indigo-400" />;
-    } else if (name.includes('sneaker')) {
-      return <Sneakers size={16} className="text-indigo-400" />;
+      return <Type size={16} className="text-indigo-400" />;
+    } else if (name.includes('jeans') || name.includes('pant')) {
+      return <Pencil size={16} className="text-indigo-400" />;
+    } else if (name.includes('shoe') || name.includes('sneaker')) {
+      return <Footprints size={16} className="text-indigo-400" />;
     } else if (name.includes('heel')) {
-      return <Heels size={16} className="text-indigo-400" />;
+      return <BookOpen size={16} className="text-indigo-400" />;
     }
     
     // Default fallback
