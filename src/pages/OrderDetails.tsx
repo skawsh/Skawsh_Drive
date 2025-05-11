@@ -72,8 +72,8 @@ const OrderDetails = () => {
       const dropTrip = {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, 
-        action: "DROP" as "PICKUP" | "DROP" | "COLLECT", 
-        status: "DROP" as "PICKUP" | "DROP" | "COMPLETED", 
+        action: "DROP", 
+        status: "DROP", 
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
         studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
@@ -87,8 +87,11 @@ const OrderDetails = () => {
         title: "Pickup completed",
         description: "A new drop-off trip has been created",
       });
+      
+      // Navigate to history to see the completed pickup
+      navigate('/history');
     }
-    // If this is a drop trip, mark it as completed and remove it from the trips array
+    // If this is a drop trip, mark it as completed and navigate to history
     else if (trip && trip.status === 'DROP') {
       // Find the original trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === id);
@@ -101,9 +104,10 @@ const OrderDetails = () => {
         title: "Drop-off completed",
         description: "Order has been moved to history",
       });
+      
+      // Navigate to history after completing the drop
+      navigate('/history');
     }
-    
-    navigate('/');
   };
 
   return (

@@ -54,7 +54,7 @@ const TripDetails = () => {
       title: "Drop-off completed",
       description: "The laundry has been successfully dropped off",
     });
-    navigate('/');
+    navigate('/history');
   };
 
   return (
