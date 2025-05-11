@@ -73,7 +73,7 @@ const OrderDetails = () => {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, 
         action: "DROP" as const, // Fix: Use "as const" to ensure correct type
-        status: "DROP", 
+        status: "DROP" as const, // Fix: Use "as const" to ensure correct type
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
         studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
