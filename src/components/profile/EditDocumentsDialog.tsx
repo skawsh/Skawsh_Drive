@@ -1,187 +1,175 @@
 
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { useForm } from "react-hook-form";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Upload } from "lucide-react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-
-interface DocumentsData {
-  aadharNumber: string;
-  aadharImage: string;
-  licenseNumber: string;
-  licenseExpiry: string;
-  licenseImage: string;
-}
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EditDocumentsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  documents: DocumentsData;
-  onSave: (data: DocumentsData) => void;
+  documents: {
+    aadharNumber: string;
+    aadharImage: string;
+    licenseNumber: string;
+    licenseExpiry: string;
+    licenseImage: string;
+  };
+  onSave: (data: any) => void;
 }
 
+const formSchema = z.object({
+  aadharNumber: z.string().min(8, "Valid Aadhar number required"),
+  licenseNumber: z.string().min(8, "Valid license number required"),
+  licenseExpiry: z.string().min(8, "Valid expiry date required"),
+});
+
 const EditDocumentsDialog = ({ open, onOpenChange, documents, onSave }: EditDocumentsDialogProps) => {
-  const [formData, setFormData] = useState<DocumentsData>({...documents});
-  const [expiryDate, setExpiryDate] = useState<Date | undefined>(
-    documents.licenseExpiry ? new Date(documents.licenseExpiry) : undefined
-  );
+  const [aadharImage, setAadharImage] = useState(documents.aadharImage);
+  const [licenseImage, setLicenseImage] = useState(documents.licenseImage);
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      aadharNumber: documents.aadharNumber,
+      licenseNumber: documents.licenseNumber,
+      licenseExpiry: documents.licenseExpiry,
+    },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setExpiryDate(date);
-    if (date) {
-      const formattedDate = format(date, "MM/dd/yyyy");
-      setFormData({
-        ...formData,
-        licenseExpiry: formattedDate
-      });
+  const handleAadharImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      // In a real app, you would upload this to a server and get back a URL
+      // For this demo, we'll just simulate an upload
+      setAadharImage("/placeholder.svg");
     }
   };
 
-  const handleSave = () => {
-    onSave(formData);
-    onOpenChange(false);
+  const handleLicenseImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      // In a real app, you would upload this to a server and get back a URL
+      // For this demo, we'll just simulate an upload
+      setLicenseImage("/placeholder.svg");
+    }
   };
 
-  const handleImageUpload = (field: keyof DocumentsData) => {
-    // In a real app, this would open a file picker and upload the image
-    // For now, we'll simulate it by setting the image to a placeholder
-    setFormData({
-      ...formData,
-      [field]: "/placeholder.svg"
-    });
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    const updatedDocuments = {
+      aadharNumber: values.aadharNumber,
+      aadharImage: aadharImage,
+      licenseNumber: values.licenseNumber,
+      licenseExpiry: values.licenseExpiry,
+      licenseImage: licenseImage,
+    };
+    
+    onSave(updatedDocuments);
+    onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 gap-0 max-w-md">
-        <DialogHeader className="px-4 py-3 flex flex-row items-center justify-between border-b border-gray-100">
-          <div className="flex items-center">
-            <DialogClose className="mr-2">
-              <ArrowLeft size={20} className="text-gray-700" />
-            </DialogClose>
-            <DialogTitle className="text-base font-medium">Edit Documents</DialogTitle>
-          </div>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Documents</DialogTitle>
         </DialogHeader>
-
-        <div className="flex flex-col px-4 py-4 space-y-5 overflow-y-auto max-h-[70vh]">
-          {/* Aadhar Details */}
-          <div className="space-y-3">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <h3 className="font-medium">Aadhar Details</h3>
             
-            <div className="space-y-2">
-              <Label htmlFor="aadharNumber">Aadhar Number</Label>
-              <Input 
-                id="aadharNumber" 
-                name="aadharNumber" 
-                value={formData.aadharNumber} 
-                onChange={handleChange} 
-                placeholder="Enter your Aadhar number"
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="aadharNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Aadhar Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter Aadhar number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             
-            <div className="space-y-2">
-              <Label>Aadhar Card Image</Label>
-              <div 
-                className="border-2 border-dashed border-gray-300 rounded-md p-4 flex flex-col items-center cursor-pointer"
-                onClick={() => handleImageUpload('aadharImage')}
-              >
-                {formData.aadharImage && formData.aadharImage !== "/placeholder.svg" ? (
-                  <div className="w-full">
-                    <img src={formData.aadharImage} alt="Aadhar Card" className="h-32 object-contain mx-auto" />
-                    <p className="text-sm text-center mt-2 text-gray-500">Click to change</p>
-                  </div>
-                ) : (
-                  <>
-                    <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                    <p className="text-sm font-medium">Upload Aadhar Card</p>
-                    <p className="text-xs text-gray-500 mt-1">PNG, JPG or PDF up to 5MB</p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* License Details */}
-          <div className="space-y-3">
-            <h3 className="font-medium">License Details</h3>
-            
-            <div className="space-y-2">
-              <Label htmlFor="licenseNumber">License Number</Label>
-              <Input 
-                id="licenseNumber" 
-                name="licenseNumber" 
-                value={formData.licenseNumber} 
-                onChange={handleChange} 
-                placeholder="Enter your license number"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="licenseExpiry">License Expiry Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !expiryDate && "text-muted-foreground"
-                    )}
-                  >
-                    {expiryDate ? format(expiryDate, "MM/dd/yyyy") : "Select expiry date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={expiryDate}
-                    onSelect={handleDateSelect}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                    className="pointer-events-auto p-3"
+            <div>
+              <FormLabel>Aadhar Card Image</FormLabel>
+              <div className="mt-1 flex items-center">
+                <div className="h-20 w-full bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={aadharImage} 
+                    alt="Aadhar Card" 
+                    className="h-full object-contain" 
                   />
-                </PopoverContent>
-              </Popover>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Driving License Image</Label>
-              <div 
-                className="border-2 border-dashed border-gray-300 rounded-md p-4 flex flex-col items-center cursor-pointer"
-                onClick={() => handleImageUpload('licenseImage')}
-              >
-                {formData.licenseImage && formData.licenseImage !== "/placeholder.svg" ? (
-                  <div className="w-full">
-                    <img src={formData.licenseImage} alt="License" className="h-32 object-contain mx-auto" />
-                    <p className="text-sm text-center mt-2 text-gray-500">Click to change</p>
-                  </div>
-                ) : (
-                  <>
-                    <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                    <p className="text-sm font-medium">Upload Driving License</p>
-                    <p className="text-xs text-gray-500 mt-1">PNG, JPG or PDF up to 5MB</p>
-                  </>
-                )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <Input 
+                  type="file" 
+                  onChange={handleAadharImageChange}
+                  accept="image/*"
+                  className="cursor-pointer"
+                />
               </div>
             </div>
-          </div>
-        </div>
-
-        <DialogFooter className="px-4 py-3 border-t border-gray-100">
-          <Button className="w-full" onClick={handleSave}>Save Documents</Button>
-        </DialogFooter>
+            
+            <h3 className="font-medium pt-2">License Details</h3>
+            
+            <FormField
+              control={form.control}
+              name="licenseNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>License Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter license number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="licenseExpiry"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>License Expiry</FormLabel>
+                  <FormControl>
+                    <Input placeholder="MM/DD/YYYY" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <div>
+              <FormLabel>License Image</FormLabel>
+              <div className="mt-1 flex items-center">
+                <div className="h-20 w-full bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={licenseImage} 
+                    alt="License" 
+                    className="h-full object-contain" 
+                  />
+                </div>
+              </div>
+              <div className="mt-2">
+                <Input 
+                  type="file" 
+                  onChange={handleLicenseImageChange}
+                  accept="image/*"
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
+            
+            <DialogFooter className="pt-4">
+              <Button type="submit">Save Changes</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
