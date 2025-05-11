@@ -5,12 +5,14 @@ import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
 import { MapPin, FileText, AlertTriangle, ArrowLeft, Check } from 'lucide-react';
 import StudioVerificationDialog from '../components/StudioVerificationDialog';
+import ReportIssueDialog from '../components/ReportIssueDialog';
 import { toast } from "@/components/ui/use-toast";
 
 const TripDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false);
+  const [isReportIssueDialogOpen, setIsReportIssueDialogOpen] = useState(false);
   
   const trip = trips.find(t => t.id === id);
   
@@ -35,8 +37,7 @@ const TripDetails = () => {
   };
 
   const handleReportIssue = () => {
-    // In a real app, this would open an issue reporting form
-    alert('Issue reporting functionality would be implemented here');
+    setIsReportIssueDialogOpen(true);
   };
 
   const handleStartVerification = () => {
@@ -55,6 +56,16 @@ const TripDetails = () => {
       description: "The laundry has been successfully dropped off",
     });
     navigate('/history');
+  };
+  
+  const handleSubmitIssueReport = (issueType: string, details: string) => {
+    // In a real app, this would send the issue report to the server
+    console.log("Issue reported:", { issueType, details });
+    
+    toast({
+      title: "Issue reported",
+      description: "Your issue has been reported to our support team",
+    });
   };
 
   return (
@@ -138,6 +149,12 @@ const TripDetails = () => {
         open={isVerificationDialogOpen}
         onOpenChange={setIsVerificationDialogOpen}
         onVerificationSuccess={handleCompleteDrop}
+      />
+      
+      <ReportIssueDialog
+        open={isReportIssueDialogOpen}
+        onOpenChange={setIsReportIssueDialogOpen}
+        onSubmit={handleSubmitIssueReport}
       />
     </div>
   );
