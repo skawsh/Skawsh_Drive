@@ -30,7 +30,10 @@ const TripDetails = () => {
     );
   }
 
+  // Check if this is a drop-off or collect trip
   const isDrop = trip.status === 'DROP';
+  const isCollect = trip.action === 'COLLECT';
+  const requiresVerification = isDrop || isCollect;
 
   const handleViewOrderDetails = () => {
     navigate(`/order-details/${id}`);
@@ -52,8 +55,8 @@ const TripDetails = () => {
     }
     
     toast({
-      title: "Drop-off completed",
-      description: "The laundry has been successfully dropped off",
+      title: isCollect ? "Collection completed" : "Drop-off completed",
+      description: isCollect ? "The laundry has been successfully collected" : "The laundry has been successfully dropped off",
     });
     navigate('/history');
   };
@@ -91,8 +94,8 @@ const TripDetails = () => {
             <h2 className="text-xl font-bold">{trip.serviceType}</h2>
           </div>
           
-          {isDrop ? (
-            // Studio information for drop trips
+          {(isDrop || isCollect) ? (
+            // Studio information for drop/collect trips
             <div className="mb-6">
               <h3 className="font-semibold text-lg">{trip.studioName || "Sparkling Clean Studio"}</h3>
               <p className="text-gray-600">{trip.studioPhone || "+91 9876543214"}</p>
@@ -122,13 +125,13 @@ const TripDetails = () => {
               View Order Details
             </button>
             
-            {isDrop && (
+            {requiresVerification && (
               <button
                 onClick={handleStartVerification}
                 className="w-full py-3 bg-laundry-primary text-white rounded-md font-medium flex items-center justify-center"
               >
                 <Check size={18} className="mr-2" />
-                Complete Drop
+                {isCollect ? "Complete Collection" : "Complete Drop"}
               </button>
             )}
             

@@ -5,9 +5,10 @@ import { ClothingItem } from '../../utils/orderUtils';
 
 interface OrderStateProps {
   initialItems: Record<string, ClothingItem[]>;
+  isReadOnly?: boolean; // Add isReadOnly prop
 }
 
-const useOrderState = ({ initialItems }: OrderStateProps) => {
+const useOrderState = ({ initialItems, isReadOnly = false }: OrderStateProps) => {
   const { toast } = useToast();
   const [actualWeight, setActualWeight] = useState<string>('');
   const [items, setItems] = useState<Record<string, ClothingItem[]>>(initialItems);
@@ -20,6 +21,14 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
 
   // Effect to detect changes
   useEffect(() => {
+    if (isReadOnly) {
+      // In read-only mode, don't show any action buttons
+      setHasUnsavedChanges(false);
+      setShowSaveButton(false);
+      setShowCompleteButton(false);
+      return;
+    }
+    
     // If weight is added or clothes are added, show save button
     const hasWeight = actualWeight !== '';
     const hasClothes = Object.keys(items).length > 0;
@@ -33,9 +42,11 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
       setHasUnsavedChanges(false);
       setShowSaveButton(false);
     }
-  }, [actualWeight, items]);
+  }, [actualWeight, items, isReadOnly]);
 
   const handleWeightConfirm = () => {
+    if (isReadOnly) return;
+    
     setShowSaveButton(true);
     toast({
       title: "Weight confirmed",
@@ -44,6 +55,8 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
   };
 
   const handleSaveChanges = () => {
+    if (isReadOnly) return;
+    
     // Check if actual weight is empty
     if (actualWeight === '') {
       toast({
@@ -66,6 +79,8 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
   };
 
   const handleCompletePickup = () => {
+    if (isReadOnly) return;
+    
     toast({
       title: "Pickup completed",
       description: "Order has been successfully completed",
@@ -78,9 +93,9 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
 
   return {
     actualWeight,
-    setActualWeight,
+    setActualWeight: isReadOnly ? () => {} : setActualWeight,
     items,
-    setItems,
+    setItems: isReadOnly ? () => {} : setItems,
     hasUnsavedChanges,
     changesSaved,
     showSaveButton,
@@ -89,6 +104,7 @@ const useOrderState = ({ initialItems }: OrderStateProps) => {
     handleSaveChanges,
     handleCompletePickup,
     isSaveDisabled,
+    isReadOnly,
   };
 };
 

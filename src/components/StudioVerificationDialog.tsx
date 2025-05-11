@@ -8,8 +8,12 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot
+} from "@/components/ui/input-otp";
 
 interface StudioVerificationDialogProps {
   open: boolean;
@@ -54,20 +58,27 @@ const StudioVerificationDialog: React.FC<StudioVerificationDialogProps> = ({
             Please enter the 4-digit verification code provided by the laundry studio.
           </p>
           
-          <Input
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            className="text-center text-lg font-medium"
-            maxLength={4}
-            placeholder="Enter 4-digit code"
-          />
+          <div className="flex justify-center mb-4">
+            <InputOTP 
+              maxLength={4}
+              value={verificationCode}
+              onChange={setVerificationCode}
+            >
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+              </InputOTPGroup>
+            </InputOTP>
+          </div>
         </div>
         
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)} variant="outline">
             Cancel
           </Button>
-          <Button onClick={handleVerify}>
+          <Button onClick={handleVerify} disabled={verificationCode.length !== 4}>
             Verify
           </Button>
         </DialogFooter>

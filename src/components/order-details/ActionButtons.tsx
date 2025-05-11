@@ -7,6 +7,7 @@ interface ActionButtonsProps {
   saveDisabled?: boolean;
   showSaveButton: boolean;
   showCompleteButton: boolean;
+  isReadOnly?: boolean;
 }
 
 const ActionButtons = ({ 
@@ -14,10 +15,11 @@ const ActionButtons = ({
   onCompletePickup, 
   saveDisabled = false,
   showSaveButton,
-  showCompleteButton
+  showCompleteButton,
+  isReadOnly = false
 }: ActionButtonsProps) => {
-  // If no buttons to show, don't render anything
-  if (!showSaveButton && !showCompleteButton) {
+  // If in read-only mode or no buttons to show, don't render anything
+  if (isReadOnly || (!showSaveButton && !showCompleteButton)) {
     return null;
   }
 
