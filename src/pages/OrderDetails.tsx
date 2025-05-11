@@ -88,7 +88,7 @@ const OrderDetails = () => {
         description: "A new drop-off trip has been created",
       });
     }
-    // If this is a drop trip, mark it as completed
+    // If this is a drop trip, mark it as completed and remove it from the trips array
     else if (trip && trip.status === 'DROP') {
       // Find the original trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === id);
