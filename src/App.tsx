@@ -10,6 +10,7 @@ import ActiveTrip from "./pages/ActiveTrip";
 import TripDetails from "./pages/TripDetails";
 import OrderDetails from "./pages/OrderDetails";
 import History from "./pages/History";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/trip-details/:id" element={<TripDetails />} />
           <Route path="/order-details/:id" element={<OrderDetails />} />
           <Route path="/history" element={<History />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
