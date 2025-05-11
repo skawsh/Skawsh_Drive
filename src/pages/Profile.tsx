@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { ArrowLeft, Camera, Edit, MapPin, Truck, FileText, Bell, HelpCircle, Info, LogOut, Languages } from "lucide-react";
+import { ArrowLeft, Camera, Edit, MapPin, Truck, FileText, HelpCircle, Info, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
@@ -20,10 +20,6 @@ const Profile = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showEditDocuments, setShowEditDocuments] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  
-  // Settings state
-  const [darkMode, setDarkMode] = useState(false);
-  const [notifications, setNotifications] = useState(true);
   
   // Mock driver data
   const [driverData, setDriverData] = useState({
@@ -51,22 +47,6 @@ const Profile = () => {
     toast({
       title: checked ? "You are now active" : "You are now inactive",
       description: checked ? "You will now receive delivery requests" : "You will not receive any delivery requests",
-    });
-  };
-
-  const handleDarkModeToggle = (checked: boolean) => {
-    setDarkMode(checked);
-    toast({
-      title: checked ? "Dark mode enabled" : "Dark mode disabled",
-      description: checked ? "Your app is now in dark mode" : "Your app is now in light mode",
-    });
-  };
-
-  const handleNotificationsToggle = (checked: boolean) => {
-    setNotifications(checked);
-    toast({
-      title: checked ? "Notifications enabled" : "Notifications disabled",
-      description: checked ? "You will receive notifications" : "You will not receive notifications",
     });
   };
 
@@ -245,45 +225,7 @@ const Profile = () => {
           </CardContent>
         </Card>
 
-        {/* Appearance Section (Moved from Settings) */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                Appearance
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Languages size={20} className="mr-3 text-gray-500" />
-                    <span>Language</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">English</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Notifications Section (Moved from Settings) */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                Notifications
-              </h3>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Bell size={20} className="mr-3 text-gray-500" />
-                  <span>Push Notifications</span>
-                </div>
-                <Switch checked={notifications} onCheckedChange={handleNotificationsToggle} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Support Section (Moved from Settings) */}
+        {/* Support Section */}
         <Card>
           <CardContent className="p-0">
             <div className="p-4">
@@ -311,7 +253,7 @@ const Profile = () => {
           </CardContent>
         </Card>
 
-        {/* Account Section (Moved from Settings) */}
+        {/* Account Section */}
         <Card>
           <CardContent className="p-0">
             <button 
