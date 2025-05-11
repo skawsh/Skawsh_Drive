@@ -72,7 +72,7 @@ const OrderDetails = () => {
       const dropTrip = {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, 
-        action: "DROP", 
+        action: "DROP" as const, // Fix: Use "as const" to ensure correct type
         status: "DROP", 
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
