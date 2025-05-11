@@ -8,7 +8,7 @@ import TripTypeToggle from '../components/TripTypeToggle';
 const Index = () => {
   const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
-  // Filter active trips only (not completed and not in history)
+  // Filter active trips only (not completed)
   const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
   const filteredTrips = activeTrips.filter(trip => trip.type === activeType);
   

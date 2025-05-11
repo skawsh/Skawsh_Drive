@@ -44,7 +44,12 @@ const TripDetails = () => {
   };
 
   const handleCompleteDrop = () => {
-    // In a real app, this would update the status in the database
+    // Find the trip and mark it as completed
+    const tripIndex = trips.findIndex(t => t.id === id);
+    if (tripIndex !== -1) {
+      trips[tripIndex].status = "COMPLETED";
+    }
+    
     toast({
       title: "Drop-off completed",
       description: "The laundry has been successfully dropped off",

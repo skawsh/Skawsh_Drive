@@ -65,15 +65,15 @@ const OrderDetails = () => {
       // First, mark the original pickup trip as completed
       const pickupIndex = trips.findIndex(t => t.id === id);
       if (pickupIndex !== -1) {
-        trips[pickupIndex].status = "COMPLETED" as "PICKUP" | "DROP" | "COMPLETED";
+        trips[pickupIndex].status = "COMPLETED";
       }
       
       // Create a new drop trip
       const dropTrip = {
         ...trip,
-        id: `DROP-${trip.id.split('-')[1]}`, // Create a new ID with DROP prefix
-        action: "DROP" as "PICKUP" | "DROP" | "COLLECT", // Fixed the type issue
-        status: "DROP" as "PICKUP" | "DROP" | "COMPLETED", // Fixed the status type
+        id: `DROP-${trip.id.split('-')[1]}`, 
+        action: "DROP" as "PICKUP" | "DROP" | "COLLECT", 
+        status: "DROP" as "PICKUP" | "DROP" | "COMPLETED", 
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
         studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
@@ -93,7 +93,7 @@ const OrderDetails = () => {
       // Find the original trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === id);
       if (tripIndex !== -1) {
-        trips[tripIndex].status = "COMPLETED" as "PICKUP" | "DROP" | "COMPLETED";
+        trips[tripIndex].status = "COMPLETED";
       }
       
       // Show success toast
