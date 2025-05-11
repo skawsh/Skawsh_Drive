@@ -11,7 +11,6 @@ import TripDetails from "./pages/TripDetails";
 import OrderDetails from "./pages/OrderDetails";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +27,6 @@ const App = () => (
           <Route path="/order-details/:id" element={<OrderDetails />} />
           <Route path="/history" element={<History />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

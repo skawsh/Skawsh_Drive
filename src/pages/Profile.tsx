@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { ArrowLeft, Camera, Edit, MapPin, Truck, FileText, User, ChevronRight } from "lucide-react";
+import { ArrowLeft, Camera, Edit, MapPin, Truck, FileText, Bell, HelpCircle, Info, LogOut, Languages } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
@@ -11,6 +11,7 @@ import NavBar from "@/components/NavBar";
 import { useToast } from "@/hooks/use-toast";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
 import EditDocumentsDialog from "@/components/profile/EditDocumentsDialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -18,6 +19,11 @@ const Profile = () => {
   const [isActive, setIsActive] = useState(true);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showEditDocuments, setShowEditDocuments] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  
+  // Settings state
+  const [darkMode, setDarkMode] = useState(false);
+  const [notifications, setNotifications] = useState(true);
   
   // Mock driver data
   const [driverData, setDriverData] = useState({
@@ -48,6 +54,22 @@ const Profile = () => {
     });
   };
 
+  const handleDarkModeToggle = (checked: boolean) => {
+    setDarkMode(checked);
+    toast({
+      title: checked ? "Dark mode enabled" : "Dark mode disabled",
+      description: checked ? "Your app is now in dark mode" : "Your app is now in light mode",
+    });
+  };
+
+  const handleNotificationsToggle = (checked: boolean) => {
+    setNotifications(checked);
+    toast({
+      title: checked ? "Notifications enabled" : "Notifications disabled",
+      description: checked ? "You will receive notifications" : "You will not receive notifications",
+    });
+  };
+
   const updateProfileData = (newData: any) => {
     setDriverData({...driverData, ...newData});
     toast({
@@ -65,6 +87,21 @@ const Profile = () => {
       title: "Documents updated",
       description: "Your documents have been updated successfully",
     });
+  };
+
+  const handleLogout = () => {
+    // Close the dialog first
+    setShowLogoutDialog(false);
+    
+    // Show toast and navigate to login (root in this case)
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully",
+    });
+    
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   };
 
   return (
@@ -207,6 +244,85 @@ const Profile = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Appearance Section (Moved from Settings) */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-4">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Appearance
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Languages size={20} className="mr-3 text-gray-500" />
+                    <span>Language</span>
+                  </div>
+                  <div className="text-sm font-medium text-gray-500">English</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Notifications Section (Moved from Settings) */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-4">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Notifications
+              </h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Bell size={20} className="mr-3 text-gray-500" />
+                  <span>Push Notifications</span>
+                </div>
+                <Switch checked={notifications} onCheckedChange={handleNotificationsToggle} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Support Section (Moved from Settings) */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-4">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Support
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <HelpCircle size={20} className="mr-3 text-gray-500" />
+                    <span>Help Center</span>
+                  </div>
+                  <button className="text-blue-600">Visit</button>
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Info size={20} className="mr-3 text-gray-500" />
+                    <span>About</span>
+                  </div>
+                  <span className="text-sm text-gray-500">v1.0.0</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Account Section (Moved from Settings) */}
+        <Card>
+          <CardContent className="p-0">
+            <button 
+              className="w-full p-4 flex items-center text-red-600"
+              onClick={() => setShowLogoutDialog(true)}
+            >
+              <LogOut size={20} className="mr-3" />
+              <span>Logout</span>
+            </button>
+          </CardContent>
+        </Card>
       </div>
 
       <NavBar />
@@ -225,6 +341,26 @@ const Profile = () => {
         documents={driverData.documents}
         onSave={updateDocuments}
       />
+
+      {/* Logout Confirmation Dialog */}
+      <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Confirm Logout</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to logout from your account?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex space-x-2 justify-end mt-4">
+            <Button variant="outline" onClick={() => setShowLogoutDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleLogout}>
+              Logout
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

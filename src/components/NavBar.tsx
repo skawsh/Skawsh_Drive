@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Truck, History, User, Settings } from 'lucide-react';
+import { Truck, History, User } from 'lucide-react';
 
 const NavBar = () => {
   const location = useLocation();
@@ -11,7 +11,6 @@ const NavBar = () => {
     { path: '/', label: 'Trips', icon: Truck },
     { path: '/history', label: 'History', icon: History },
     { path: '/profile', label: 'Profile', icon: User },
-    { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
   return (
