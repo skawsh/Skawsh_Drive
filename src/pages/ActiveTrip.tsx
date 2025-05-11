@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
-import { MapPin, ArrowLeft, Store, Phone } from 'lucide-react';
+import { MapPin, ArrowLeft, Store, Phone, Clock } from 'lucide-react';
 import NavBar from '../components/NavBar';
 
 const ActiveTrip = () => {
@@ -38,17 +38,33 @@ const ActiveTrip = () => {
     navigate(`/trip-details/${id}`);
   };
 
+  const handleSnooze = () => {
+    // In a real app, this would implement the snooze functionality
+    alert('Snooze functionality would be implemented here');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <button 
+              onClick={() => navigate('/')}
+              className="mr-4 p-1"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <h1 className="text-xl font-bold text-gray-800">Active Trip</h1>
+          </div>
+          
+          {/* Added the snooze button here */}
           <button 
-            onClick={() => navigate('/')}
-            className="mr-4 p-1"
+            onClick={handleSnooze}
+            className="bg-laundry-lightGray px-3 py-1 rounded-md text-sm font-medium text-gray-700 flex items-center"
           >
-            <ArrowLeft size={24} />
+            <Clock size={16} className="mr-1" />
+            Snooze
           </button>
-          <h1 className="text-xl font-bold text-gray-800">Active Trip</h1>
         </div>
       </div>
       

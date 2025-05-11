@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
-import { MapPin, Clock, FileText, AlertTriangle, ArrowLeft, Check } from 'lucide-react';
+import { MapPin, FileText, AlertTriangle, ArrowLeft, Check } from 'lucide-react';
 import StudioVerificationDialog from '../components/StudioVerificationDialog';
 import { toast } from "@/components/ui/use-toast";
 
@@ -73,12 +73,7 @@ const TripDetails = () => {
       
       <div className="container mx-auto px-4 pt-20 pb-4">
         <div className="bg-white rounded-lg shadow-md p-6 relative">
-          <button 
-            className="absolute top-4 right-4 bg-laundry-lightGray px-3 py-1 rounded-md text-sm font-medium text-gray-700"
-          >
-            <Clock size={16} className="inline mr-1" />
-            Snooze
-          </button>
+          {/* Removed the snooze button from here */}
           
           <div className="mb-6">
             <span className="block text-laundry-primary font-medium mb-1">{trip.id}</span>
