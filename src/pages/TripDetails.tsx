@@ -59,12 +59,13 @@ const TripDetails = () => {
       // Create a new delivery trip
       const deliveryTrip = {
         ...trip,
-        id: `DEL-${trip.id.split('-')[1]}`, 
+        id: `DEL-${trip.id.split('-')[1]}`,
         action: "DROP" as const,
         status: "PICKUP" as const, // Set as PICKUP so it shows in the active trips
-        customerName: trip.customerName,
-        phoneNumber: trip.phoneNumber,
-        address: trip.address,
+        // Preserve customer information for delivery trips
+        customerName: trip.customerName || "Customer Name",
+        phoneNumber: trip.phoneNumber || "+91 9876543210",
+        address: trip.address || "Customer Address",
       };
       
       // Add to trips array
