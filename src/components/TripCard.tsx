@@ -15,15 +15,17 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
     navigate(`/active-trip/${trip.id}`);
   };
 
-  // Determine if this is a pickup, collect or drop trip
+  // Determine if this is a pickup, collect, drop or delivery trip
   const isPickup = trip.action === 'PICKUP';
   const isCollect = trip.action === 'COLLECT';
   const isDrop = trip.status === 'DROP';
+  const isDelivery = trip.id.startsWith('DEL-');
   
   let buttonText = 'Start Trip';
   if (isPickup) buttonText = 'Start Pick up';
   if (isCollect) buttonText = 'Start Collect';
   if (isDrop) buttonText = 'Start Drop';
+  if (isDelivery) buttonText = 'Start Delivery';
 
   return (
     <div className="bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100">
@@ -40,8 +42,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
       </div>
       
       <div className="mb-3">
-        {(isPickup) ? (
-          // Customer information for pickup trips
+        {(isPickup || isDelivery) ? (
+          // Customer information for pickup and delivery trips
           <>
             <div className="flex items-center mt-2 text-gray-700">
               <User size={16} className="text-indigo-400 mr-2" />
