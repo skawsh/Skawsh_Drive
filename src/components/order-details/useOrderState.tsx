@@ -5,12 +5,13 @@ import { ClothingItem } from '../../utils/orderUtils';
 
 interface OrderStateProps {
   initialItems: Record<string, ClothingItem[]>;
-  isReadOnly?: boolean; // Add isReadOnly prop
+  isReadOnly?: boolean;
+  demoActualWeight?: string; // Add prop for demo weight
 }
 
-const useOrderState = ({ initialItems, isReadOnly = false }: OrderStateProps) => {
+const useOrderState = ({ initialItems, isReadOnly = false, demoActualWeight }: OrderStateProps) => {
   const { toast } = useToast();
-  const [actualWeight, setActualWeight] = useState<string>('');
+  const [actualWeight, setActualWeight] = useState<string>(demoActualWeight || '');
   const [items, setItems] = useState<Record<string, ClothingItem[]>>(initialItems);
   
   // Track UI state
@@ -19,13 +20,22 @@ const useOrderState = ({ initialItems, isReadOnly = false }: OrderStateProps) =>
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showCompleteButton, setShowCompleteButton] = useState(false);
 
+  // Effect to initialize showCompleteButton for read-only mode
+  useEffect(() => {
+    if (isReadOnly) {
+      // In read-only mode, show complete button right away and hide save button
+      setShowCompleteButton(true);
+      setShowSaveButton(false);
+    }
+  }, [isReadOnly]);
+
   // Effect to detect changes
   useEffect(() => {
     if (isReadOnly) {
       // In read-only mode, don't show any action buttons
       setHasUnsavedChanges(false);
       setShowSaveButton(false);
-      setShowCompleteButton(false);
+      setShowCompleteButton(true);  // Always show complete button in read-only mode
       return;
     }
     
@@ -79,7 +89,14 @@ const useOrderState = ({ initialItems, isReadOnly = false }: OrderStateProps) =>
   };
 
   const handleCompletePickup = () => {
-    if (isReadOnly) return;
+    if (isReadOnly) {
+      // For read-only mode (drop or collect trips)
+      toast({
+        title: isReadOnly ? "Trip completed" : "Pickup completed",
+        description: "Order has been successfully processed",
+      });
+      return;
+    }
     
     toast({
       title: "Pickup completed",

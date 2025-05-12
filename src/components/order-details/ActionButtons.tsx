@@ -18,8 +18,8 @@ const ActionButtons = ({
   showCompleteButton,
   isReadOnly = false
 }: ActionButtonsProps) => {
-  // If in read-only mode or no buttons to show, don't render anything
-  if (isReadOnly || (!showSaveButton && !showCompleteButton)) {
+  // If no buttons to show, don't render anything
+  if (!showSaveButton && !showCompleteButton) {
     return null;
   }
 
@@ -42,9 +42,13 @@ const ActionButtons = ({
       {showCompleteButton && (
         <button
           onClick={onCompletePickup}
-          className="flex-1 py-3 bg-laundry-success text-white rounded-md font-medium"
+          className={`flex-1 py-3 rounded-md font-medium ${
+            isReadOnly 
+              ? 'bg-laundry-success text-white' 
+              : 'bg-laundry-success text-white'
+          }`}
         >
-          Complete Pickup
+          {isReadOnly ? 'Complete Process' : 'Complete Pickup'}
         </button>
       )}
     </div>

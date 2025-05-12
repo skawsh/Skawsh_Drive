@@ -37,7 +37,7 @@ const WeightDetailsSection: React.FC<WeightDetailsSectionProps> = ({
       <div className="flex items-center">
         <p className="text-sm mr-3 font-medium">Actual Weight (kg):</p>
         {isReadOnly ? (
-          <p className="font-medium">{actualWeight || "Not confirmed"} kg</p>
+          <p className="font-medium text-blue-700">{actualWeight || "Not confirmed"}</p>
         ) : (
           <input
             type="number"
@@ -51,6 +51,14 @@ const WeightDetailsSection: React.FC<WeightDetailsSectionProps> = ({
           />
         )}
       </div>
+      
+      {isReadOnly && actualWeight && (
+        <div className="mt-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-md">
+          <p className="text-xs text-blue-700">
+            This weight was confirmed by the pickup agent
+          </p>
+        </div>
+      )}
     </div>
   );
 };

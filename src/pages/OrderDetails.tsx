@@ -25,8 +25,10 @@ const OrderDetails = () => {
     return <OrderNotFound />;
   }
 
-  // Check if this is a drop trip
+  // Check if this is a drop or collect trip (both should be read-only)
   const isDrop = trip.status === 'DROP';
+  const isCollect = trip.action === 'COLLECT';
+  const isReadOnly = isDrop || isCollect;
 
   // Process initial items from trip data
   const initialItems = processTripItems(trip.items);
@@ -43,7 +45,13 @@ const OrderDetails = () => {
     handleSaveChanges,
     handleCompletePickup,
     isSaveDisabled,
-  } = useOrderState({ initialItems });
+    isReadOnly: orderStateReadOnly
+  } = useOrderState({ 
+    initialItems,
+    isReadOnly, // Pass read-only status
+    // Add demo data for weight if it's a drop or collect trip
+    demoActualWeight: isReadOnly ? "5.2" : undefined
+  });
 
   // Use order items hook
   const {
@@ -122,23 +130,24 @@ const OrderDetails = () => {
           items={items}
           onWeightConfirm={handleWeightConfirm}
           onAddClothes={() => setIsAddClothesOpen(true)}
-          onEditClothingItem={isDrop ? undefined : handleEditClothingItem}
-          onDeleteClothingItem={isDrop ? undefined : handleDeleteClothingItem}
-          isReadOnly={isDrop}
+          onEditClothingItem={isReadOnly ? undefined : handleEditClothingItem}
+          onDeleteClothingItem={isReadOnly ? undefined : handleDeleteClothingItem}
+          isReadOnly={isReadOnly}
         />
         
         <ActionButtons 
           onSaveChanges={handleSaveChanges} 
           onCompletePickup={completePickupWithNavigation}
           saveDisabled={isSaveDisabled}
-          showSaveButton={showSaveButton && !isDrop}
-          showCompleteButton={showCompleteButton || isDrop}
+          showSaveButton={showSaveButton && !isReadOnly}
+          showCompleteButton={showCompleteButton || isReadOnly}
+          isReadOnly={isReadOnly}
         />
       </div>
       
       <NavBar />
       
-      {!isDrop && (
+      {!isReadOnly && (
         <>
           <AddClothesDialog
             open={isAddClothesOpen}
