@@ -62,6 +62,7 @@ const TripDetails = () => {
         id: `DEL-${trip.id.split('-')[1]}`,
         action: "DROP" as const,
         status: "PICKUP" as const, // Set as PICKUP so it shows in the active trips
+        type: trip.type, // Ensure the type (EXPRESS/STANDARD) is preserved
         // Preserve customer information for delivery trips
         customerName: trip.customerName || "Customer Name",
         phoneNumber: trip.phoneNumber || "+91 9876543210",
@@ -75,14 +76,17 @@ const TripDetails = () => {
         title: "Collection completed",
         description: "A new delivery trip has been created",
       });
+      
+      // Navigate to the dashboard to see the new delivery trip
+      navigate('/');
     } else {
       toast({
         title: "Drop-off completed",
         description: "The laundry has been successfully dropped off",
       });
+      
+      navigate('/history');
     }
-    
-    navigate('/history');
   };
   
   const handleSubmitIssueReport = (issueType: string, details: string) => {

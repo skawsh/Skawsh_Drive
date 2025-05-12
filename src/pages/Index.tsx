@@ -12,9 +12,11 @@ const Index = () => {
   const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
   const filteredTrips = activeTrips.filter(trip => trip.type === activeType);
   
+  // Classify trips by their purpose
   const pickupTrips = filteredTrips.filter(trip => trip.action === "PICKUP" && trip.status === "PICKUP");
   const collectTrips = filteredTrips.filter(trip => trip.action === "COLLECT" && trip.status === "PICKUP");
   const dropTrips = filteredTrips.filter(trip => trip.status === "DROP");
+  const deliveryTrips = filteredTrips.filter(trip => trip.id.startsWith('DEL-') && trip.status === "PICKUP");
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
@@ -56,10 +58,21 @@ const Index = () => {
             )}
             
             {collectTrips.length > 0 && (
-              <div>
+              <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-700 mb-3">Collect</h2>
                 <div className="space-y-4">
                   {collectTrips.map((trip) => (
+                    <TripCard key={trip.id} trip={trip} />
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {deliveryTrips.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-700 mb-3">Delivery</h2>
+                <div className="space-y-4">
+                  {deliveryTrips.map((trip) => (
                     <TripCard key={trip.id} trip={trip} />
                   ))}
                 </div>
