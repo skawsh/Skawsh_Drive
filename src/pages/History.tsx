@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
-import { User, Phone, MapPin, Building, Check, Store } from 'lucide-react';
+import { User, Phone, MapPin, Building, Check, Store, Calendar } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const History = () => {
   // Filter trips that have been completed
@@ -56,7 +58,9 @@ const History = () => {
                   <Card key={baseId} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mx-1">
                     {/* Order ID and Service Type */}
                     <div className="mb-4">
-                      <p className="text-blue-500 font-medium mb-1">ID: {displayTrip.id}</p>
+                      <div className="flex items-center mb-1">
+                        <p className="text-blue-500 font-medium">ID: {displayTrip.id}</p>
+                      </div>
                       <h2 className="text-xl font-bold">{displayTrip.serviceType}</h2>
                     </div>
                     
@@ -65,21 +69,21 @@ const History = () => {
                       <>
                         {/* Studio Information */}
                         <div className="mb-4">
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center text-gray-700">
                             <Store size={16} className="text-blue-400 mr-2" />
-                            <h4 className="font-medium text-gray-700">
+                            <h4 className="font-medium">
                               {collectTrip?.studioName || "Sparkling Clean Studio"}
                             </h4>
                           </div>
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center mt-2 text-gray-600">
                             <Phone size={16} className="text-blue-400 mr-2" />
-                            <p className="text-gray-600">
+                            <p>
                               {collectTrip?.studioPhone || "+91 9876543214"}
                             </p>
                           </div>
-                          <div className="flex items-start mt-2">
+                          <div className="flex items-start mt-2 text-gray-600">
                             <MapPin size={16} className="text-blue-400 mr-2 mt-1 flex-shrink-0" />
-                            <p className="text-gray-600">
+                            <p>
                               {collectTrip?.studioAddress || "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana"}
                             </p>
                           </div>
@@ -97,17 +101,17 @@ const History = () => {
                         
                         {/* Customer Information */}
                         <div className="mb-4">
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center text-gray-700">
                             <User size={16} className="text-blue-400 mr-2" />
-                            <h4 className="font-medium text-gray-700">{deliveryTrip?.customerName}</h4>
+                            <h4 className="font-medium">{deliveryTrip?.customerName}</h4>
                           </div>
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center mt-2 text-gray-600">
                             <Phone size={16} className="text-blue-400 mr-2" />
-                            <p className="text-gray-600">{deliveryTrip?.phoneNumber}</p>
+                            <p>{deliveryTrip?.phoneNumber}</p>
                           </div>
-                          <div className="flex items-start mt-2">
+                          <div className="flex items-start mt-2 text-gray-600">
                             <MapPin size={16} className="text-blue-400 mr-2 mt-1 flex-shrink-0" />
-                            <p className="text-gray-600">{deliveryTrip?.address}</p>
+                            <p>{deliveryTrip?.address}</p>
                           </div>
                           <div className="mt-2 font-medium">Payment: COD</div>
                         </div>
@@ -123,54 +127,55 @@ const History = () => {
                         </div>
                       </>
                     ) : hasPickupAndDrop ? (
-                      // Traditional Pickup and Drop UI - Keep existing functionality
+                      // Traditional Pickup and Drop UI - Modified to match the new design
                       <>
-                        {/* Customer Information */}
+                        {/* Studio Information for drop trip */}
                         <div className="mb-4">
-                          <div className="flex items-center mt-2">
-                            <User size={16} className="text-blue-400 mr-2" />
-                            <h4 className="font-medium text-gray-700">{pickupTrip.customerName}</h4>
+                          <div className="flex items-center text-gray-700">
+                            <Store size={16} className="text-blue-400 mr-2" />
+                            <h4 className="font-medium">{dropTrip.studioName || "Sparkling Clean Studio"}</h4>
                           </div>
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center mt-2 text-gray-600">
                             <Phone size={16} className="text-blue-400 mr-2" />
-                            <p className="text-gray-600">{pickupTrip.phoneNumber}</p>
+                            <p>{dropTrip.studioPhone || "+91 9876543214"}</p>
                           </div>
-                          <div className="flex items-start mt-2">
+                          <div className="flex items-start mt-2 text-gray-600">
                             <MapPin size={16} className="text-blue-400 mr-2 mt-1 flex-shrink-0" />
-                            <p className="text-gray-600">{pickupTrip.address}</p>
+                            <p>{dropTrip.studioAddress || "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana"}</p>
                           </div>
                         </div>
                         
-                        {/* Pickup Status */}
+                        {/* Collected Status */}
                         <div className="mb-4">
                           <div className="bg-gray-100 rounded-md p-3 flex justify-between items-center">
-                            <span className="font-medium">Picked Up</span>
+                            <span className="font-medium">Collected</span>
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                               <Check size={16} className="text-white" />
                             </div>
                           </div>
                         </div>
                         
-                        {/* Studio Information */}
+                        {/* Customer Information from pickup trip */}
                         <div className="mb-4">
-                          <div className="flex items-center mt-2">
-                            <Building size={16} className="text-blue-400 mr-2" />
-                            <h4 className="font-medium text-gray-700">{dropTrip.studioName || "Sparkling Clean Studio"}</h4>
+                          <div className="flex items-center text-gray-700">
+                            <User size={16} className="text-blue-400 mr-2" />
+                            <h4 className="font-medium">{pickupTrip.customerName}</h4>
                           </div>
-                          <div className="flex items-center mt-2">
+                          <div className="flex items-center mt-2 text-gray-600">
                             <Phone size={16} className="text-blue-400 mr-2" />
-                            <p className="text-gray-600">{dropTrip.studioPhone || "+91 9876543214"}</p>
+                            <p>{pickupTrip.phoneNumber}</p>
                           </div>
-                          <div className="flex items-start mt-2">
+                          <div className="flex items-start mt-2 text-gray-600">
                             <MapPin size={16} className="text-blue-400 mr-2 mt-1 flex-shrink-0" />
-                            <p className="text-gray-600">{dropTrip.studioAddress || "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana"}</p>
+                            <p>{pickupTrip.address}</p>
                           </div>
+                          <div className="mt-2 font-medium">Payment: COD</div>
                         </div>
                         
-                        {/* Drop Status */}
+                        {/* Delivered Status */}
                         <div className="mb-1">
                           <div className="bg-gray-100 rounded-md p-3 flex justify-between items-center">
-                            <span className="font-medium">Dropped off</span>
+                            <span className="font-medium">Delivered</span>
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                               <Check size={16} className="text-white" />
                             </div>
