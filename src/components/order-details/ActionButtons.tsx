@@ -23,6 +23,19 @@ const ActionButtons = ({
     return null;
   }
 
+  // Determine the button text based on isReadOnly
+  // For delivery trips we need to show "Complete Delivery"
+  const getCompleteButtonText = () => {
+    if (!isReadOnly) return "Complete Pickup";
+    
+    // Check if current URL contains "DEL-" to determine if it's a delivery trip
+    const isDeliveryTrip = window.location.pathname.includes("DEL-");
+    
+    if (isDeliveryTrip) return "Complete Delivery";
+    if (window.location.pathname.includes("DROP-")) return "Complete Drop";
+    return "Complete Process";
+  };
+
   return (
     <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 p-4 flex gap-3 shadow-lg">
       {showSaveButton && (
@@ -48,7 +61,7 @@ const ActionButtons = ({
               : 'bg-laundry-success text-white'
           }`}
         >
-          {isReadOnly ? 'Complete Process' : 'Complete Pickup'}
+          {getCompleteButtonText()}
         </button>
       )}
     </div>

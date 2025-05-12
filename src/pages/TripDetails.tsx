@@ -54,10 +54,33 @@ const TripDetails = () => {
       trips[tripIndex].status = "COMPLETED";
     }
     
-    toast({
-      title: isCollect ? "Collection completed" : "Drop-off completed",
-      description: isCollect ? "The laundry has been successfully collected" : "The laundry has been successfully dropped off",
-    });
+    // If this is a collect trip, create a new delivery trip
+    if (isCollect) {
+      // Create a new delivery trip
+      const deliveryTrip = {
+        ...trip,
+        id: `DEL-${trip.id.split('-')[1]}`, 
+        action: "DROP" as const,
+        status: "PICKUP" as const, // Set as PICKUP so it shows in the active trips
+        customerName: trip.customerName,
+        phoneNumber: trip.phoneNumber,
+        address: trip.address,
+      };
+      
+      // Add to trips array
+      trips.push(deliveryTrip);
+      
+      toast({
+        title: "Collection completed",
+        description: "A new delivery trip has been created",
+      });
+    } else {
+      toast({
+        title: "Drop-off completed",
+        description: "The laundry has been successfully dropped off",
+      });
+    }
+    
     navigate('/history');
   };
   

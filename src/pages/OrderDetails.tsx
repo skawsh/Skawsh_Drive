@@ -28,7 +28,8 @@ const OrderDetails = () => {
   // Check if this is a drop or collect trip (both should be read-only)
   const isDrop = trip.status === 'DROP';
   const isCollect = trip.action === 'COLLECT';
-  const isReadOnly = isDrop || isCollect;
+  const isDelivery = id?.startsWith('DEL-');
+  const isReadOnly = isDrop || isCollect || isDelivery;
 
   // Process initial items from trip data
   const initialItems = processTripItems(trip.items);
@@ -80,8 +81,8 @@ const OrderDetails = () => {
       const dropTrip = {
         ...trip,
         id: `DROP-${trip.id.split('-')[1]}`, 
-        action: "DROP" as const, // Fix: Use "as const" to ensure correct type
-        status: "DROP" as const, // Fix: Use "as const" to ensure correct type
+        action: "DROP" as const,
+        status: "DROP" as const,
         studioName: "Sparkling Clean Studio",
         studioPhone: "+91 9876543214",
         studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
@@ -114,6 +115,23 @@ const OrderDetails = () => {
       });
       
       // Navigate to history after completing the drop
+      navigate('/history');
+    }
+    // If this is a delivery trip, mark it as completed and navigate to history
+    else if (trip && id?.startsWith('DEL-')) {
+      // Find the trip and mark it as completed
+      const tripIndex = trips.findIndex(t => t.id === id);
+      if (tripIndex !== -1) {
+        trips[tripIndex].status = "COMPLETED";
+      }
+      
+      // Show success toast
+      toast({
+        title: "Delivery completed",
+        description: "Order has been delivered successfully",
+      });
+      
+      // Navigate to history after completing the delivery
       navigate('/history');
     }
   };
