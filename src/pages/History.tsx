@@ -22,11 +22,11 @@ const History = () => {
   }, {} as Record<string, typeof trips>);
   
   return (
-    <div className="min-h-screen bg-white pb-16">
+    <div className="min-h-screen bg-white">
       <HistoryHeader />
       
-      <div className="container mx-auto px-4 pt-16 pb-20">
-        <ScrollArea className="h-[calc(100vh-120px)]">
+      <div className="container mx-auto px-4 pt-20 pb-20">
+        <ScrollArea className="h-[calc(100vh-8rem)]">
           <CompletedTripsList groupedTrips={groupedTrips} />
         </ScrollArea>
       </div>

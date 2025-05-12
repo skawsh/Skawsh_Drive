@@ -25,13 +25,11 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   // For traditional pickup/drop flow
   const hasPickupAndDrop = pickupTrip && dropTrip;
 
+  // Display ID at the bottom for a cleaner look
   return (
     <Card key={baseId} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mx-1">
-      {/* Order ID and Service Type */}
+      {/* Service Type */}
       <div className="mb-4">
-        <div className="flex items-center mb-1">
-          <p className="text-blue-500 font-medium">ID: {displayTrip.id}</p>
-        </div>
         <h2 className="text-xl font-bold">{displayTrip.serviceType}</h2>
       </div>
       
@@ -43,6 +41,11 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
       ) : (
         <SingleTripView displayTrip={displayTrip} />
       )}
+      
+      {/* Order ID */}
+      <div className="mt-4 pt-2 border-t border-gray-100">
+        <p className="text-sm text-blue-500">ID: {displayTrip.id}</p>
+      </div>
     </Card>
   );
 };
@@ -125,7 +128,7 @@ interface PickupAndDropViewProps {
 const PickupAndDropView: React.FC<PickupAndDropViewProps> = ({ pickupTrip, dropTrip }) => {
   return (
     <>
-      {/* Studio Information for drop trip */}
+      {/* Studio Information */}
       <div className="mb-4">
         <div className="flex items-center text-gray-700">
           <Store size={16} className="text-blue-400 mr-2" />
@@ -151,7 +154,7 @@ const PickupAndDropView: React.FC<PickupAndDropViewProps> = ({ pickupTrip, dropT
         </div>
       </div>
       
-      {/* Customer Information from pickup trip */}
+      {/* Customer Information */}
       <div className="mb-4">
         <div className="flex items-center text-gray-700">
           <User size={16} className="text-blue-400 mr-2" />
