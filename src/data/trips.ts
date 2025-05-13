@@ -38,6 +38,23 @@ export const trips: Trip[] = [
     ]
   },
   {
+    id: "STD-4321",
+    type: "STANDARD",
+    serviceType: "Standard Wash & Press",
+    customerName: "Rahul Sharma",
+    phoneNumber: "+91 9876123456",
+    address: "202, Lotus Apartments, Madhapur, Hyderabad, Telangana",
+    distance: 3.8,
+    action: "PICKUP",
+    status: "PICKUP",
+    estimatedWeight: 2.5,
+    items: [
+      { category: "Upper Wear", name: "Shirts", quantity: 3 },
+      { category: "Bottom Wear", name: "Trousers", quantity: 2 },
+      { category: "Upper Wear", name: "T-Shirts", quantity: 2 }
+    ]
+  },
+  {
     id: "EXP-2345",
     type: "EXPRESS",
     serviceType: "Express Dry Clean",
