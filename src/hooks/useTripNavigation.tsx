@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { trips } from '../data/trips';
 import { Trip } from '../data/trips';
@@ -74,32 +73,16 @@ export const useTripNavigation = (trip: Trip | undefined) => {
         description: "A new delivery trip has been created",
       });
       
-      // Find the next nearest trip (should be the delivery trip we just created)
-      const nextTrip = findNextNearestTrip();
-      
-      if (nextTrip) {
-        // Navigate to that trip
-        navigate(`/active-trip/${nextTrip.id}`);
-      } else {
-        // Navigate to dashboard if no next trip
-        navigate('/');
-      }
+      // Redirect to trips section instead of next trip
+      navigate('/');
     } else {
       toast({
         title: "Drop-off completed",
         description: "The laundry has been successfully dropped off",
       });
       
-      // Find the next nearest trip
-      const nextTrip = findNextNearestTrip();
-      
-      if (nextTrip) {
-        // Navigate to that trip
-        navigate(`/active-trip/${nextTrip.id}`);
-      } else {
-        // Navigate to dashboard if no next trip
-        navigate('/');
-      }
+      // Redirect to trips section instead of next trip
+      navigate('/');
     }
   };
   

@@ -11,7 +11,7 @@ const SingleTripView: React.FC<SingleTripViewProps> = ({ displayTrip }) => {
   // Determine what kind of trip this is
   const isPickup = displayTrip.action === 'PICKUP';
   const isCollect = displayTrip.action === 'COLLECT';
-  const isDrop = displayTrip.status === 'DROP';
+  const isDrop = displayTrip.status === 'DROP' || displayTrip.id.includes('DROP-');
   const isDelivery = displayTrip.id.startsWith('DEL-');
   
   // Determine status label

@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Trip, trips } from '../../data/trips';
 import { toast } from "@/components/ui/use-toast";
@@ -80,7 +79,7 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
         description: "A new drop-off trip has been created",
       });
     } 
-    // If this is a drop trip, mark it as completed and navigate to next nearest trip
+    // If this is a drop trip, mark it as completed and navigate to trips section
     else if (trip && trip.status === 'DROP') {
       // Find the original trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === trip.id);
@@ -95,7 +94,7 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
         description: "Order has been moved to history",
       });
     } 
-    // If this is a delivery trip, mark it as completed and navigate to next nearest trip
+    // If this is a delivery trip, mark it as completed and navigate to trips section
     else if (trip && trip.id.startsWith('DEL-')) {
       // Find the trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === trip.id);
@@ -111,16 +110,8 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
       });
     }
     
-    // Find the next nearest trip
-    const nextTrip = findNextNearestTrip();
-    
-    if (nextTrip) {
-      // Navigate to that trip
-      navigate(`/active-trip/${nextTrip.id}`);
-    } else {
-      // Navigate to dashboard if no next trip
-      navigate('/');
-    }
+    // Always redirect to trips section after completion
+    navigate('/');
   };
 
   return { completeTrip };
