@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import { trips } from '../data/trips';
 import { Trip } from '../data/trips';

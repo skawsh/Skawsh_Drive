@@ -38,8 +38,7 @@ const TripDetails = () => {
   }
 
   // Get trip status information
-  const { isDrop, isCollect } = useTripStatusManager(trip);
-  const requiresVerification = isDrop || isCollect;
+  const { isDrop, isCollect, requiresVerification } = useTripStatusManager(trip);
 
   // Use trip verification hook
   const {
