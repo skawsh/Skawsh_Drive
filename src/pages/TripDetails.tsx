@@ -121,7 +121,8 @@ const TripDetails = () => {
       <ReportIssueDialog
         open={isReportIssueDialogOpen}
         onOpenChange={setIsReportIssueDialogOpen}
-        onSubmit={handleSubmitIssueReport}
+        onSubmit={(issueType, details) => handleSubmitIssueReport(id!, issueType, details)}
+        tripId={id}
       />
     </div>
   );

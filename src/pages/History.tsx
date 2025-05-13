@@ -1,18 +1,27 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { trips } from '../data/trips';
 import NavBar from '../components/NavBar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import HistoryHeader from '../components/history/HistoryHeader';
 import CompletedTripsList from '../components/history/CompletedTripsList';
+import ReportedTripsList from '../components/history/ReportedTripsList';
+import HistoryTabs from '../components/history/HistoryTabs';
+import { TabsContent } from '@/components/ui/tabs';
 import { Trip } from '../data/trips';
 
 const History = () => {
+  const [activeTab, setActiveTab] = useState('completed');
+  
   // Filter trips that have been completed
-  const completedTrips = trips.filter(trip => trip.status === 'COMPLETED');
+  const completedTrips = trips.filter(trip => trip.status === 'COMPLETED' && !trip.reportedIssue);
+  
+  // Filter trips that have reported issues
+  const reportedTrips = trips.filter(trip => trip.reportedIssue !== undefined);
   
   console.log('All trips:', trips);
   console.log('Completed trips:', completedTrips);
+  console.log('Reported trips:', reportedTrips);
   
   // Group trips by their base ID (excluding the prefix)
   const groupedTrips: {[key: string]: Trip[]} = completedTrips.reduce((groups: {[key: string]: Trip[]}, trip) => {
@@ -45,9 +54,20 @@ const History = () => {
       <HistoryHeader />
       
       <div className="flex-1 container mx-auto px-4 pt-16 pb-20 flex flex-col">
-        <h1 className="text-xl font-bold mb-4 text-center">Order History</h1>
         <ScrollArea className="flex-1 overflow-auto">
-          <CompletedTripsList groupedTrips={groupedTripsArray} />
+          <HistoryTabs 
+            activeTab={activeTab}
+            completedCount={completedTrips.length}
+            reportedCount={reportedTrips.length}
+            onTabChange={setActiveTab}
+          >
+            <TabsContent value="completed">
+              <CompletedTripsList groupedTrips={groupedTripsArray} />
+            </TabsContent>
+            <TabsContent value="reported">
+              <ReportedTripsList reportedTrips={reportedTrips} />
+            </TabsContent>
+          </HistoryTabs>
         </ScrollArea>
       </div>
       

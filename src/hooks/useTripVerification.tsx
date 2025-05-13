@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { toast } from "@/components/ui/use-toast";
+import { trips } from '../data/trips';
 
 export const useTripVerification = (onVerificationSuccess: () => void) => {
   const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false);
@@ -14,9 +15,21 @@ export const useTripVerification = (onVerificationSuccess: () => void) => {
     setIsReportIssueDialogOpen(true);
   };
 
-  const handleSubmitIssueReport = (issueType: string, details: string) => {
-    // In a real app, this would send the issue report to the server
-    console.log("Issue reported:", { issueType, details });
+  const handleSubmitIssueReport = (tripId: string, issueType: string, details: string) => {
+    // Find the trip and mark it as reported
+    const tripIndex = trips.findIndex(t => t.id === tripId);
+    if (tripIndex !== -1) {
+      // Add reported issue information to the trip
+      trips[tripIndex].reportedIssue = {
+        type: issueType,
+        details: details,
+        reportedAt: new Date().toISOString(),
+      };
+      
+      // Mark as completed so it appears in history
+      trips[tripIndex].status = "COMPLETED";
+      console.log(`Trip ${tripId} marked as reported with issue: ${issueType}`);
+    }
     
     toast({
       title: "Issue reported",

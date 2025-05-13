@@ -15,15 +15,16 @@ import { Textarea } from "@/components/ui/textarea";
 interface ReportIssueDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (issueType: string, details: string) => void;
+  onSubmit: (tripId: string, issueType: string, details: string) => void;
+  tripId?: string;
 }
 
-const ReportIssueDialog = ({ open, onOpenChange, onSubmit }: ReportIssueDialogProps) => {
+const ReportIssueDialog = ({ open, onOpenChange, onSubmit, tripId = '' }: ReportIssueDialogProps) => {
   const [issueType, setIssueType] = useState<string>("");
   const [details, setDetails] = useState<string>("");
 
   const handleSubmit = () => {
-    onSubmit(issueType, details);
+    onSubmit(tripId, issueType, details);
     setIssueType("");
     setDetails("");
     onOpenChange(false);
