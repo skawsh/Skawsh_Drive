@@ -17,7 +17,11 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   // Find different trip types in this group
   const pickupTrip = tripsGroup.find(t => t.action === 'PICKUP' && !t.id.startsWith('DEL-'));
   const collectTrip = tripsGroup.find(t => t.action === 'COLLECT');
-  const dropTrip = tripsGroup.find(t => t.status === 'DROP');
+  const dropTrip = tripsGroup.find(t => 
+    (t.status === 'DROP') || 
+    (t.action === 'DROP') ||
+    (t.id.startsWith('DROP-'))
+  );
   const deliveryTrip = tripsGroup.find(t => t.id.startsWith('DEL-'));
   
   // Use this trip for display information (prefer pickup but use any available)
@@ -28,6 +32,9 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   
   // For traditional pickup/drop flow
   const hasPickupAndDrop = pickupTrip && dropTrip;
+  
+  console.log('Trip group for baseId', baseId, ':', tripsGroup);
+  console.log('hasPickupAndDrop:', hasPickupAndDrop, 'pickupTrip:', pickupTrip, 'dropTrip:', dropTrip);
 
   return (
     <Card key={baseId} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mx-1 mb-4">

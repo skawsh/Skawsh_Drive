@@ -16,7 +16,7 @@ const History = () => {
   
   // Group trips by their base ID (excluding the prefix)
   const groupedTrips: {[key: string]: Trip[]} = completedTrips.reduce((groups: {[key: string]: Trip[]}, trip) => {
-    // Extract base ID (e.g., "1234" from "PICKUP-1234")
+    // Extract base ID (e.g., "1234" from "PICKUP-1234" or "STD-1234")
     const baseId = trip.id.split('-')[1] || trip.id;
     
     if (!groups[baseId]) {
