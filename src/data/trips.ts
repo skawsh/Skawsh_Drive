@@ -13,6 +13,7 @@ export interface Trip {
   studioPhone?: string;
   studioAddress?: string;
   status?: "PICKUP" | "DROP" | "COMPLETED";
+  paymentMethod?: string;
   items?: {
     category: string;
     name: string;
