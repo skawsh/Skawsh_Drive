@@ -24,8 +24,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, isEnabled = true }) => {
   const isDrop = trip.status === 'DROP';
   const isDelivery = trip.id.startsWith('DEL-');
   
+  // Set button text based on trip type
   let buttonText = 'Start Trip';
-  if (isPickup) buttonText = 'Start Pick up';
+  if (isPickup) buttonText = 'Start Pickup';
   if (isCollect) buttonText = 'Start Collect';
   if (isDrop) buttonText = 'Start Drop';
   if (isDelivery) buttonText = 'Start Delivery';
@@ -91,7 +92,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, isEnabled = true }) => {
         disabled={!isEnabled}
         className={`w-full py-2 ${isEnabled ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'} text-white rounded-md font-medium transition-colors`}
       >
-        {isEnabled ? buttonText : 'Complete Previous Trip First'}
+        {buttonText}
       </button>
     </div>
   );
