@@ -8,54 +8,23 @@ import TripTypeToggle from '../components/TripTypeToggle';
 const Index = () => {
   const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
-  // Filter active trips only (not completed)
-  const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
+  // Filter active trips only (not completed or snoozed)
+  const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED' && trip.status !== 'SNOOZED');
   
-  // Handle snoozed trips
-  const nonSnoozedTrips = activeTrips.filter(trip => trip.status !== 'SNOOZED');
-  const nextOrderSnoozedTrips = activeTrips.filter(
-    trip => trip.status === 'SNOOZED' && trip.snoozedUntil === 'NEXT_ORDER'
-  );
-  const lastOrderSnoozedTrips = activeTrips.filter(
-    trip => trip.status === 'SNOOZED' && trip.snoozedUntil === 'LAST_ORDER'
-  );
-  
-  // Create the ordered trips array
-  let orderedTrips = [...nonSnoozedTrips];
-  
-  // Append snooze-till-next-order trips after the first trip
-  if (nextOrderSnoozedTrips.length > 0 && nonSnoozedTrips.length > 0) {
-    orderedTrips = [
-      nonSnoozedTrips[0],
-      ...nextOrderSnoozedTrips,
-      ...nonSnoozedTrips.slice(1)
-    ];
-  }
-  
-  // Append last-order snoozed trips at the end
-  orderedTrips = [...orderedTrips, ...lastOrderSnoozedTrips];
-  
-  // Filter by type after reordering
-  const filteredTrips = orderedTrips.filter(trip => trip.type === activeType);
+  // Filter by type
+  const filteredTrips = activeTrips.filter(trip => trip.type === activeType);
   
   // Sort by distance (nearest to farthest)
-  const sortedTrips = [...filteredTrips].sort((a, b) => {
-    // Snoozed trips should maintain their position
-    if (a.status === 'SNOOZED' && b.status !== 'SNOOZED') return 1;
-    if (a.status !== 'SNOOZED' && b.status === 'SNOOZED') return -1;
-    
-    // Sort non-snoozed trips by distance
-    return a.distance - b.distance;
-  });
+  const sortedTrips = [...filteredTrips].sort((a, b) => a.distance - b.distance);
   
   // Enable only the first trip
   const isEnabled = (trip: Trip) => {
-    // If it's not the first non-snoozed trip of its type, disable it
-    const firstNonSnoozedTrip = nonSnoozedTrips
+    // If it's not the first trip of its type, disable it
+    const firstTrip = activeTrips
       .filter(t => t.type === activeType)
       .sort((a, b) => a.distance - b.distance)[0];
     
-    return trip.id === firstNonSnoozedTrip?.id;
+    return trip.id === firstTrip?.id;
   };
 
   return (
