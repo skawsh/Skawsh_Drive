@@ -5,6 +5,7 @@ import NavBar from '../components/NavBar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import HistoryHeader from '../components/history/HistoryHeader';
 import CompletedTripsList from '../components/history/CompletedTripsList';
+import { Trip } from '../data/trips';
 
 const History = () => {
   // Filter trips that have been completed
@@ -14,7 +15,7 @@ const History = () => {
   console.log('Completed trips:', completedTrips);
   
   // Group trips by their base ID (excluding the prefix)
-  const groupedTrips = completedTrips.reduce((groups, trip) => {
+  const groupedTrips: {[key: string]: Trip[]} = completedTrips.reduce((groups: {[key: string]: Trip[]}, trip) => {
     // Extract base ID (e.g., "1234" from "PICKUP-1234")
     const baseId = trip.id.split('-')[1] || trip.id;
     
