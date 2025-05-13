@@ -15,31 +15,9 @@ const Index = () => {
   // Sort trips by distance (nearest to farthest)
   const sortedTrips = [...filteredTrips].sort((a, b) => a.distance - b.distance);
   
-  // Find the first trip overall to enable (the closest one)
-  const firstTripId = sortedTrips.length > 0 ? sortedTrips[0].id : null;
-
-  // Function to determine if a trip should be enabled
-  const isEnabled = (trip: Trip) => {
-    // If this is the first trip, enable it
-    if (trip.id === firstTripId) return true;
-    
-    // If this is a drop trip, check if corresponding pickup is completed
-    if (trip.status === 'DROP') {
-      // Extract the base ID to find the original pickup trip
-      const baseId = trip.id.split('-')[1];
-      const pickupTrip = trips.find(t => t.id === `PICKUP-${baseId}` || t.id === `EXP-${baseId}` || t.id === `STD-${baseId}`);
-      return pickupTrip?.status === 'COMPLETED';
-    }
-    
-    // If this is a delivery trip, check if corresponding collect trip is completed
-    if (trip.id.startsWith('DEL-')) {
-      const baseId = trip.id.split('-')[1];
-      const collectTrip = trips.find(t => t.action === 'COLLECT' && t.id.includes(baseId));
-      return collectTrip?.status === 'COMPLETED';
-    }
-    
-    return false;
-  };
+  // Enable all trips by setting all to be active
+  // This makes all trips available rather than just the first one
+  const isEnabled = (trip: Trip) => true;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
