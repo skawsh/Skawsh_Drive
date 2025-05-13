@@ -29,12 +29,12 @@ const History = () => {
   );
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <HistoryHeader />
       
-      <div className="container mx-auto px-4 pt-16 pb-20">
+      <div className="flex-1 container mx-auto px-4 pt-16 pb-20 flex flex-col">
         <h1 className="text-xl font-bold mb-4 text-center">Order History</h1>
-        <ScrollArea className="h-[calc(100vh-8rem)]">
+        <ScrollArea className="flex-1 overflow-auto">
           <CompletedTripsList groupedTrips={sortedGroupedTrips} />
         </ScrollArea>
       </div>
