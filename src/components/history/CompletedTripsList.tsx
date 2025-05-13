@@ -14,7 +14,7 @@ const CompletedTripsList: React.FC<CompletedTripsListProps> = ({ groupedTrips })
   }
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-2 pb-16">
       {Object.entries(groupedTrips).map(([baseId, tripsGroup]) => (
         <CompletedTripCard key={baseId} baseId={baseId} tripsGroup={tripsGroup} />
       ))}

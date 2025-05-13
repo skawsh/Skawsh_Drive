@@ -21,13 +21,21 @@ const History = () => {
     return acc;
   }, {} as Record<string, typeof trips>);
   
+  // Sort grouped trips by most recent completion date
+  // Since we don't have completion dates, we'll just use the order in the array
+  // In a real app, you'd sort by completion date
+  const sortedGroupedTrips = Object.fromEntries(
+    Object.entries(groupedTrips).reverse()
+  );
+  
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <HistoryHeader />
       
-      <div className="container mx-auto px-4 pt-20 pb-20">
+      <div className="container mx-auto px-4 pt-16 pb-20">
+        <h1 className="text-xl font-bold mb-4 text-center">Order History</h1>
         <ScrollArea className="h-[calc(100vh-8rem)]">
-          <CompletedTripsList groupedTrips={groupedTrips} />
+          <CompletedTripsList groupedTrips={sortedGroupedTrips} />
         </ScrollArea>
       </div>
       

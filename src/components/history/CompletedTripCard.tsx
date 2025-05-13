@@ -17,7 +17,7 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   // Find different trip types
   const pickupTrip = tripsGroup.find(t => t.action === 'PICKUP' && !t.id.startsWith('DEL-')) || tripsGroup[0];
   const collectTrip = tripsGroup.find(t => t.action === 'COLLECT');
-  const dropTrip = tripsGroup.find(t => t.action === 'DROP');
+  const dropTrip = tripsGroup.find(t => t.status === 'DROP');
   const deliveryTrip = tripsGroup.find(t => t.id.startsWith('DEL-'));
   
   // Use this trip for display (prefer pickup but use any available)
@@ -30,9 +30,10 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   const hasPickupAndDrop = pickupTrip && dropTrip;
 
   return (
-    <Card key={baseId} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mx-1">
-      {/* Service Type */}
-      <div className="mb-4">
+    <Card key={baseId} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mx-1 mb-4">
+      {/* Service Type and ID */}
+      <div className="mb-2">
+        <p className="text-sm text-blue-500">ID: {displayTrip.id}</p>
         <h2 className="text-xl font-bold">{displayTrip.serviceType}</h2>
       </div>
       
@@ -44,11 +45,6 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
       ) : (
         <SingleTripView displayTrip={displayTrip} />
       )}
-      
-      {/* Order ID */}
-      <div className="mt-4 pt-2 border-t border-gray-100">
-        <p className="text-sm text-blue-500">ID: {displayTrip.id}</p>
-      </div>
     </Card>
   );
 };
