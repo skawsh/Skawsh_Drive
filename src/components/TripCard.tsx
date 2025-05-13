@@ -23,6 +23,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, isEnabled = true }) => {
   const isCollect = trip.action === 'COLLECT';
   const isDrop = trip.status === 'DROP';
   const isDelivery = trip.id.startsWith('DEL-');
+  const isSnoozed = trip.status === 'SNOOZED';
   
   // Set button text based on trip type
   let buttonText = 'Start Trip';
@@ -31,8 +32,11 @@ const TripCard: React.FC<TripCardProps> = ({ trip, isEnabled = true }) => {
   if (isDrop) buttonText = 'Start Drop';
   if (isDelivery) buttonText = 'Start Delivery';
 
+  // Determine border color class
+  const borderColorClass = isSnoozed ? 'border-orange-500' : 'border-gray-100';
+
   return (
-    <div className={`bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100 ${!isEnabled ? 'opacity-70' : ''}`}>
+    <div className={`bg-white rounded-lg shadow-md mb-4 p-4 border ${borderColorClass} ${!isEnabled ? 'opacity-70' : ''}`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex flex-col">
           <span className="text-sm font-medium text-laundry-primary">ID: {trip.id}</span>

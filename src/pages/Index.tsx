@@ -1,23 +1,62 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { trips, Trip } from '../data/trips';
 import NavBar from '../components/NavBar';
 import TripCard from '../components/TripCard';
 import TripTypeToggle from '../components/TripTypeToggle';
 
 const Index = () => {
-  const [activeType, setActiveType] = React.useState<"EXPRESS" | "STANDARD">("STANDARD");
+  const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
   
   // Filter active trips only (not completed)
   const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
-  const filteredTrips = activeTrips.filter(trip => trip.type === activeType);
   
-  // Sort trips by distance (nearest to farthest)
-  const sortedTrips = [...filteredTrips].sort((a, b) => a.distance - b.distance);
+  // Handle snoozed trips
+  const nonSnoozedTrips = activeTrips.filter(trip => trip.status !== 'SNOOZED');
+  const nextOrderSnoozedTrips = activeTrips.filter(
+    trip => trip.status === 'SNOOZED' && trip.snoozedUntil === 'NEXT_ORDER'
+  );
+  const lastOrderSnoozedTrips = activeTrips.filter(
+    trip => trip.status === 'SNOOZED' && trip.snoozedUntil === 'LAST_ORDER'
+  );
   
-  // Enable all trips by setting all to be active
-  // This makes all trips available rather than just the first one
-  const isEnabled = (trip: Trip) => true;
+  // Create the ordered trips array
+  let orderedTrips = [...nonSnoozedTrips];
+  
+  // Append snooze-till-next-order trips after the first trip
+  if (nextOrderSnoozedTrips.length > 0 && nonSnoozedTrips.length > 0) {
+    orderedTrips = [
+      nonSnoozedTrips[0],
+      ...nextOrderSnoozedTrips,
+      ...nonSnoozedTrips.slice(1)
+    ];
+  }
+  
+  // Append last-order snoozed trips at the end
+  orderedTrips = [...orderedTrips, ...lastOrderSnoozedTrips];
+  
+  // Filter by type after reordering
+  const filteredTrips = orderedTrips.filter(trip => trip.type === activeType);
+  
+  // Sort by distance (nearest to farthest)
+  const sortedTrips = [...filteredTrips].sort((a, b) => {
+    // Snoozed trips should maintain their position
+    if (a.status === 'SNOOZED' && b.status !== 'SNOOZED') return 1;
+    if (a.status !== 'SNOOZED' && b.status === 'SNOOZED') return -1;
+    
+    // Sort non-snoozed trips by distance
+    return a.distance - b.distance;
+  });
+  
+  // Enable only the first trip
+  const isEnabled = (trip: Trip) => {
+    // If it's not the first non-snoozed trip of its type, disable it
+    const firstNonSnoozedTrip = nonSnoozedTrips
+      .filter(t => t.type === activeType)
+      .sort((a, b) => a.distance - b.distance)[0];
+    
+    return trip.id === firstNonSnoozedTrip?.id;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">

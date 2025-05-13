@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import { Trip, trips } from '../../data/trips';
 import { toast } from "@/components/ui/use-toast";
@@ -73,6 +74,20 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
         trips.push(dropTrip);
       }
       
+      // Check if there are any trips snoozed until next order completion
+      const nextOrderSnoozedTrips = trips.filter(
+        t => t.status === 'SNOOZED' && t.snoozedUntil === 'NEXT_ORDER'
+      );
+      
+      // Activate the snoozed trips
+      nextOrderSnoozedTrips.forEach(snoozedTrip => {
+        const snoozedIndex = trips.findIndex(t => t.id === snoozedTrip.id);
+        if (snoozedIndex !== -1) {
+          trips[snoozedIndex].status = "PICKUP";
+          trips[snoozedIndex].snoozedUntil = undefined;
+        }
+      });
+      
       // Show success toast
       toast({
         title: "Pickup completed",
@@ -88,6 +103,20 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
         console.log(`Drop trip ${trip.id} marked as COMPLETED`);
       }
       
+      // Check if there are any trips snoozed until next order completion
+      const nextOrderSnoozedTrips = trips.filter(
+        t => t.status === 'SNOOZED' && t.snoozedUntil === 'NEXT_ORDER'
+      );
+      
+      // Activate the snoozed trips
+      nextOrderSnoozedTrips.forEach(snoozedTrip => {
+        const snoozedIndex = trips.findIndex(t => t.id === snoozedTrip.id);
+        if (snoozedIndex !== -1) {
+          trips[snoozedIndex].status = "PICKUP";
+          trips[snoozedIndex].snoozedUntil = undefined;
+        }
+      });
+      
       // Show success toast
       toast({
         title: "Drop-off completed",
@@ -102,6 +131,20 @@ export const useTripCompletionManager = ({ trip }: TripCompletionManagerProps) =
         trips[tripIndex].status = "COMPLETED";
         console.log(`Delivery trip ${trip.id} marked as COMPLETED`);
       }
+      
+      // Check if there are any trips snoozed until next order completion
+      const nextOrderSnoozedTrips = trips.filter(
+        t => t.status === 'SNOOZED' && t.snoozedUntil === 'NEXT_ORDER'
+      );
+      
+      // Activate the snoozed trips
+      nextOrderSnoozedTrips.forEach(snoozedTrip => {
+        const snoozedIndex = trips.findIndex(t => t.id === snoozedTrip.id);
+        if (snoozedIndex !== -1) {
+          trips[snoozedIndex].status = "PICKUP";
+          trips[snoozedIndex].snoozedUntil = undefined;
+        }
+      });
       
       // Show success toast
       toast({

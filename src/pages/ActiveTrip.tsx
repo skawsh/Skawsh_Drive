@@ -48,18 +48,34 @@ const ActiveTrip = () => {
 
   const handleSnoozeUntilNextOrderCompletion = () => {
     // In a real app, this would implement the snooze until next order completion logic
+    const tripIndex = trips.findIndex(t => t.id === id);
+    if (tripIndex !== -1) {
+      trips[tripIndex].status = "SNOOZED";
+      trips[tripIndex].snoozedUntil = "NEXT_ORDER";
+    }
+    
     toast({
       title: "Order Snoozed",
       description: "This order will resume after the completion of next order",
     });
+    
+    navigate('/');
   };
 
   const handleSnoozeToLastOrder = () => {
     // In a real app, this would implement the snooze to last order logic
+    const tripIndex = trips.findIndex(t => t.id === id);
+    if (tripIndex !== -1) {
+      trips[tripIndex].status = "SNOOZED";
+      trips[tripIndex].snoozedUntil = "LAST_ORDER";
+    }
+    
     toast({
       title: "Order Snoozed",
       description: "This order has been moved to the end of your queue",
     });
+    
+    navigate('/');
   };
 
   return (
