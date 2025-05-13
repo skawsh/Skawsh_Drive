@@ -92,8 +92,9 @@ const OrderDetails = () => {
           onCompletePickup={completePickupWithNavigation}
           saveDisabled={isSaveDisabled}
           showSaveButton={showSaveButton && !isReadOnly}
-          showCompleteButton={showCompleteButton || isReadOnly}
+          showCompleteButton={!isReadOnly && showCompleteButton}
           isReadOnly={isReadOnly}
+          tripId={id}
         />
       </div>
       

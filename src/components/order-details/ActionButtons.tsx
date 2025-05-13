@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 interface ActionButtonsProps {
   onSaveChanges: () => void;
@@ -8,6 +10,7 @@ interface ActionButtonsProps {
   showSaveButton: boolean;
   showCompleteButton: boolean;
   isReadOnly?: boolean;
+  tripId?: string;
 }
 
 const ActionButtons = ({ 
@@ -16,11 +19,36 @@ const ActionButtons = ({
   saveDisabled = false,
   showSaveButton,
   showCompleteButton,
-  isReadOnly = false
+  isReadOnly = false,
+  tripId
 }: ActionButtonsProps) => {
+  const navigate = useNavigate();
+
   // If no buttons to show, don't render anything
   if (!showSaveButton && !showCompleteButton) {
     return null;
+  }
+
+  // Navigate back to trip details for read-only views
+  const handleBackToTripDetails = () => {
+    if (tripId) {
+      navigate(`/trip-details/${tripId}`);
+    }
+  };
+
+  // For read-only trips (drop, collect, delivery), show back button instead of complete button
+  if (isReadOnly && tripId) {
+    return (
+      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 p-4 flex gap-3 shadow-lg">
+        <button
+          onClick={handleBackToTripDetails}
+          className="flex-1 py-3 rounded-md font-medium bg-laundry-primary text-white flex items-center justify-center"
+        >
+          <ArrowLeft size={18} className="mr-2" />
+          Back to Trip Details
+        </button>
+      </div>
+    );
   }
 
   // Determine the button text based on isReadOnly
