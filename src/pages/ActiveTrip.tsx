@@ -2,9 +2,10 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
-import { MapPin, ArrowLeft, Store, Phone } from 'lucide-react';
+import { MapPin, ArrowLeft, Store, Phone, Clock } from 'lucide-react';
 import NavBar from '../components/NavBar';
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 const ActiveTrip = () => {
   const { id } = useParams<{ id: string }>();
@@ -40,6 +41,14 @@ const ActiveTrip = () => {
     navigate(`/trip-details/${id}`);
   };
 
+  const handleSnooze = () => {
+    // This is a non-functional placeholder
+    toast({
+      title: "Feature not available",
+      description: "Snooze functionality is not implemented yet.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-sm">
@@ -53,6 +62,15 @@ const ActiveTrip = () => {
             </button>
             <h1 className="text-xl font-bold text-gray-800">Active Trip</h1>
           </div>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleSnooze}
+            className="flex items-center gap-1 border-orange-400 text-orange-600"
+          >
+            <Clock size={16} />
+            Snooze
+          </Button>
         </div>
       </div>
       
