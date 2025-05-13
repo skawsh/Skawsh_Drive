@@ -67,13 +67,10 @@ const SingleTripView: React.FC<SingleTripViewProps> = ({ displayTrip }) => {
       </div>
       
       {/* Status */}
-      <div className="flex items-center justify-between">
-        <span className="font-medium">{statusLabel}</span>
-        <div className="flex items-center">
-          <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-1">
-            <Check size={14} className="text-white" />
-          </div>
-        </div>
+      <div className="flex justify-center mt-2">
+        <button className="bg-white border border-gray-200 text-green-600 font-medium rounded-md px-4 py-1 flex items-center">
+          {statusLabel} <Check size={16} className="ml-1 text-green-500" />
+        </button>
       </div>
     </>
   );

@@ -14,14 +14,14 @@ interface CompletedTripCardProps {
 }
 
 const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGroup }) => {
-  // Find different trip types
-  const pickupTrip = tripsGroup.find(t => t.action === 'PICKUP' && !t.id.startsWith('DEL-')) || tripsGroup[0];
+  // Find different trip types in this group
+  const pickupTrip = tripsGroup.find(t => t.action === 'PICKUP' && !t.id.startsWith('DEL-'));
   const collectTrip = tripsGroup.find(t => t.action === 'COLLECT');
   const dropTrip = tripsGroup.find(t => t.status === 'DROP');
   const deliveryTrip = tripsGroup.find(t => t.id.startsWith('DEL-'));
   
-  // Use this trip for display (prefer pickup but use any available)
-  const displayTrip = pickupTrip || collectTrip || dropTrip || deliveryTrip;
+  // Use this trip for display information (prefer pickup but use any available)
+  const displayTrip = pickupTrip || collectTrip || dropTrip || deliveryTrip || tripsGroup[0];
   
   // Check if we have both collection and delivery completed
   const hasCollectAndDelivery = collectTrip && deliveryTrip;
@@ -30,7 +30,7 @@ const CompletedTripCard: React.FC<CompletedTripCardProps> = ({ baseId, tripsGrou
   const hasPickupAndDrop = pickupTrip && dropTrip;
 
   return (
-    <Card key={baseId} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mx-1 mb-4">
+    <Card key={baseId} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mx-1 mb-4">
       {/* Service Type and ID */}
       <div className="mb-2">
         <p className="text-sm text-blue-500">ID: {displayTrip.id}</p>

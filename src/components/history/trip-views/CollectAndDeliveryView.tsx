@@ -28,19 +28,14 @@ const CollectAndDeliveryView: React.FC<CollectAndDeliveryViewProps> = ({ collect
       </div>
       
       {/* Collection Status */}
-      <div className="mb-3 border-b pb-2">
-        <div className="flex items-center justify-between">
-          <span className="font-medium">Collected</span>
-          <div className="flex items-center">
-            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-1">
-              <Check size={14} className="text-white" />
-            </div>
-          </div>
-        </div>
+      <div className="flex justify-center my-2">
+        <button className="bg-white border border-gray-200 text-green-600 font-medium rounded-md px-4 py-1 flex items-center">
+          Collected <Check size={16} className="ml-1 text-green-500" />
+        </button>
       </div>
       
       {/* Customer Information */}
-      <div className="mb-3">
+      <div className="mt-3 mb-2">
         <div className="flex items-center text-gray-700">
           <User size={16} className="text-blue-400 mr-2" />
           <h4 className="font-medium">{deliveryTrip?.customerName}</h4>
@@ -57,13 +52,10 @@ const CollectAndDeliveryView: React.FC<CollectAndDeliveryViewProps> = ({ collect
       </div>
       
       {/* Delivery Status */}
-      <div className="flex items-center justify-between">
-        <span className="font-medium">Delivered</span>
-        <div className="flex items-center">
-          <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-1">
-            <Check size={14} className="text-white" />
-          </div>
-        </div>
+      <div className="flex justify-center mt-2">
+        <button className="bg-white border border-gray-200 text-green-600 font-medium rounded-md px-4 py-1 flex items-center">
+          Delivered <Check size={16} className="ml-1 text-green-500" />
+        </button>
       </div>
     </>
   );
