@@ -6,16 +6,18 @@ export interface ReportedIssue {
   reportedAt: string;
 }
 
-// Import the original Trip type
-import { Trip as OriginalTrip } from '../data/trips';
+// Define the payment method type
+export type PaymentMethodType = 'COD' | 'ONLINE' | 'PREPAID';
 
-// Define extended properties for the Trip type
+// Define extra properties that can be added to the Trip interface
 export interface TripExtensions {
   reportedIssue?: ReportedIssue;
-  paymentMethod?: 'COD' | 'ONLINE' | 'PREPAID';
 }
 
-// Extend the Trip type from data/trips.ts
+// Declare module augmentation for the Trip type
+// This adds our extensions to the original Trip type without causing circular references
 declare module '../data/trips' {
-  interface Trip extends OriginalTrip, TripExtensions {}
+  interface Trip {
+    reportedIssue?: ReportedIssue;
+  }
 }

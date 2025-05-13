@@ -1,4 +1,6 @@
 
+import { PaymentMethodType } from "../types/trips";
+
 export interface Trip {
   id: string;
   type: "EXPRESS" | "STANDARD"; 
@@ -13,7 +15,7 @@ export interface Trip {
   studioPhone?: string;
   studioAddress?: string;
   status?: "PICKUP" | "DROP" | "COMPLETED" | "SNOOZED";
-  paymentMethod?: string;
+  paymentMethod?: PaymentMethodType;
   snoozedUntil?: "NEXT_ORDER" | "LAST_ORDER";
   items?: {
     category: string;
