@@ -12,8 +12,9 @@ export interface Trip {
   studioName?: string;
   studioPhone?: string;
   studioAddress?: string;
-  status?: "PICKUP" | "DROP" | "COMPLETED";
+  status?: "PICKUP" | "DROP" | "COMPLETED" | "SNOOZED";
   paymentMethod?: string;
+  snoozedUntil?: "NEXT_ORDER" | "LAST_ORDER";
   items?: {
     category: string;
     name: string;

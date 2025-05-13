@@ -1,13 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
 import { MapPin, ArrowLeft, Store, Phone, Clock } from 'lucide-react';
 import NavBar from '../components/NavBar';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 const ActiveTrip = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const trip = trips.find(t => t.id === id);
   
@@ -38,9 +46,20 @@ const ActiveTrip = () => {
     navigate(`/trip-details/${id}`);
   };
 
-  const handleSnooze = () => {
-    // In a real app, this would implement the snooze functionality
-    alert('Snooze functionality would be implemented here');
+  const handleSnoozeUntilNextOrderCompletion = () => {
+    // In a real app, this would implement the snooze until next order completion logic
+    toast({
+      title: "Order Snoozed",
+      description: "This order will resume after the completion of next order",
+    });
+  };
+
+  const handleSnoozeToLastOrder = () => {
+    // In a real app, this would implement the snooze to last order logic
+    toast({
+      title: "Order Snoozed",
+      description: "This order has been moved to the end of your queue",
+    });
   };
 
   return (
@@ -57,14 +76,30 @@ const ActiveTrip = () => {
             <h1 className="text-xl font-bold text-gray-800">Active Trip</h1>
           </div>
           
-          {/* Added the snooze button here */}
-          <button 
-            onClick={handleSnooze}
-            className="bg-laundry-lightGray px-3 py-1 rounded-md text-sm font-medium text-gray-700 flex items-center"
-          >
-            <Clock size={16} className="mr-1" />
-            Snooze
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button 
+                className="bg-laundry-lightGray px-3 py-1 rounded-md text-sm font-medium text-gray-700 flex items-center"
+              >
+                <Clock size={16} className="mr-1" />
+                Snooze
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64 bg-white">
+              <DropdownMenuItem 
+                onClick={handleSnoozeUntilNextOrderCompletion}
+                className="cursor-pointer"
+              >
+                Snooze until completion of next order
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={handleSnoozeToLastOrder}
+                className="cursor-pointer"
+              >
+                Snooze to the last order
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       
