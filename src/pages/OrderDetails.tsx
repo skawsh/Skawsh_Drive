@@ -69,12 +69,15 @@ const OrderDetails = () => {
   const completePickupWithNavigation = () => {
     handleCompletePickup();
     
+    console.log("Completing pickup/drop in OrderDetails for trip:", trip.id);
+    
     // If this is a pickup trip, create a drop trip and mark the pickup as completed
     if (trip && trip.action === 'PICKUP' && trip.status !== 'DROP') {
       // First, mark the original pickup trip as completed
       const pickupIndex = trips.findIndex(t => t.id === id);
       if (pickupIndex !== -1) {
         trips[pickupIndex].status = "COMPLETED";
+        console.log(`Pickup trip ${id} marked as COMPLETED`);
       }
       
       // Create a new drop trip
@@ -97,6 +100,10 @@ const OrderDetails = () => {
         description: "A new drop-off trip has been created",
       });
       
+      // Log the current state of trips
+      console.log("After creating drop trip, all trips:", trips);
+      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
+      
       // Navigate to history to see the completed pickup
       navigate('/history');
     }
@@ -106,6 +113,7 @@ const OrderDetails = () => {
       const tripIndex = trips.findIndex(t => t.id === id);
       if (tripIndex !== -1) {
         trips[tripIndex].status = "COMPLETED";
+        console.log(`Drop trip ${id} marked as COMPLETED`);
       }
       
       // Show success toast
@@ -113,6 +121,10 @@ const OrderDetails = () => {
         title: "Drop-off completed",
         description: "Order has been moved to history",
       });
+      
+      // Log the current state of trips
+      console.log("After completing drop, all trips:", trips);
+      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
       
       // Navigate to history after completing the drop
       navigate('/history');
@@ -123,6 +135,7 @@ const OrderDetails = () => {
       const tripIndex = trips.findIndex(t => t.id === id);
       if (tripIndex !== -1) {
         trips[tripIndex].status = "COMPLETED";
+        console.log(`Delivery trip ${id} marked as COMPLETED`);
       }
       
       // Show success toast
@@ -130,6 +143,10 @@ const OrderDetails = () => {
         title: "Delivery completed",
         description: "Order has been delivered successfully",
       });
+      
+      // Log the current state of trips
+      console.log("After completing delivery, all trips:", trips);
+      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
       
       // Navigate to history after completing the delivery
       navigate('/history');

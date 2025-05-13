@@ -48,10 +48,13 @@ const TripDetails = () => {
   };
 
   const handleCompleteDrop = () => {
+    console.log("Completing trip:", trip.id);
+    
     // Find the trip and mark it as completed
     const tripIndex = trips.findIndex(t => t.id === id);
     if (tripIndex !== -1) {
       trips[tripIndex].status = "COMPLETED";
+      console.log(`Trip ${id} marked as COMPLETED`);
     }
     
     // If this is a collect trip, create a new delivery trip
@@ -85,6 +88,11 @@ const TripDetails = () => {
         description: "The laundry has been successfully dropped off",
       });
       
+      // Force refresh the trips array so that the UI updates
+      console.log("Before navigating to history, completed trips:", 
+        trips.filter(t => t.status === 'COMPLETED'));
+      
+      // Navigate to history to see the completed trip
       navigate('/history');
     }
   };

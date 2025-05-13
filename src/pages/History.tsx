@@ -10,6 +10,9 @@ const History = () => {
   // Filter trips that have been completed
   const completedTrips = trips.filter(trip => trip.status === 'COMPLETED');
   
+  console.log('All trips:', trips);
+  console.log('Completed trips:', completedTrips);
+  
   // Group completed trips by their base ID (without the PICKUP/DROP/DEL prefix)
   const groupedTrips = completedTrips.reduce((acc, trip) => {
     // Extract the base ID
