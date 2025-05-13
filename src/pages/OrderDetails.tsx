@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trips } from '../data/trips';
@@ -65,6 +64,38 @@ const OrderDetails = () => {
     handleUpdateItemQuantity
   } = useOrderItems({ items, setItems });
 
+  // Find next nearest trip
+  const findNextNearestTrip = () => {
+    // Filter active trips 
+    const activeTrips = trips
+      .filter(t => t.status !== 'COMPLETED')
+      .sort((a, b) => a.distance - b.distance);
+    
+    let nextTrip = null;
+    
+    // If this is a pickup trip, find the nearest drop trip
+    if (trip.action === 'PICKUP') {
+      // Extract the base ID
+      const baseId = trip.id.split('-')[1];
+      // Look for the corresponding drop trip
+      nextTrip = activeTrips.find(t => t.id === `DROP-${baseId}`);
+    } 
+    // If this is a collect trip, find the nearest delivery trip
+    else if (trip.action === 'COLLECT') {
+      // Extract the base ID
+      const baseId = trip.id.split('-')[1];
+      // Look for the corresponding delivery trip
+      nextTrip = activeTrips.find(t => t.id === `DEL-${baseId}`);
+    }
+    
+    // If no specific next trip is found, return the closest trip
+    if (!nextTrip && activeTrips.length > 0) {
+      nextTrip = activeTrips[0];
+    }
+    
+    return nextTrip;
+  };
+
   // Handle complete pickup with navigation
   const completePickupWithNavigation = () => {
     handleCompletePickup();
@@ -80,19 +111,24 @@ const OrderDetails = () => {
         console.log(`Pickup trip ${id} marked as COMPLETED`);
       }
       
-      // Create a new drop trip
-      const dropTrip = {
-        ...trip,
-        id: `DROP-${trip.id.split('-')[1]}`, 
-        action: "DROP" as const,
-        status: "DROP" as const,
-        studioName: "Sparkling Clean Studio",
-        studioPhone: "+91 9876543214",
-        studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
-      };
+      // Create a new drop trip if it doesn't already exist
+      const dropTripId = `DROP-${trip.id.split('-')[1]}`;
+      const existingDropTrip = trips.find(t => t.id === dropTripId);
       
-      // Add to trips array
-      trips.push(dropTrip);
+      if (!existingDropTrip) {
+        const dropTrip = {
+          ...trip,
+          id: dropTripId, 
+          action: "DROP" as const,
+          status: "DROP" as const,
+          studioName: "Sparkling Clean Studio",
+          studioPhone: "+91 9876543214",
+          studioAddress: "Shop 23, MG Road, Secunderabad, Hyderabad, Telangana",
+        };
+        
+        // Add to trips array
+        trips.push(dropTrip);
+      }
       
       // Show success toast
       toast({
@@ -100,14 +136,18 @@ const OrderDetails = () => {
         description: "A new drop-off trip has been created",
       });
       
-      // Log the current state of trips
-      console.log("After creating drop trip, all trips:", trips);
-      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
+      // Find the next nearest trip
+      const nextTrip = findNextNearestTrip();
       
-      // Navigate to history to see the completed pickup
-      navigate('/history');
-    }
-    // If this is a drop trip, mark it as completed and navigate to history
+      if (nextTrip) {
+        // Navigate to that trip
+        navigate(`/active-trip/${nextTrip.id}`);
+      } else {
+        // Navigate to dashboard if no next trip
+        navigate('/');
+      }
+    } 
+    // If this is a drop trip, mark it as completed and navigate to next nearest trip
     else if (trip && trip.status === 'DROP') {
       // Find the original trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === id);
@@ -122,14 +162,18 @@ const OrderDetails = () => {
         description: "Order has been moved to history",
       });
       
-      // Log the current state of trips
-      console.log("After completing drop, all trips:", trips);
-      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
+      // Find the next nearest trip
+      const nextTrip = findNextNearestTrip();
       
-      // Navigate to history after completing the drop
-      navigate('/history');
-    }
-    // If this is a delivery trip, mark it as completed and navigate to history
+      if (nextTrip) {
+        // Navigate to that trip
+        navigate(`/active-trip/${nextTrip.id}`);
+      } else {
+        // Navigate to dashboard if no next trip
+        navigate('/');
+      }
+    } 
+    // If this is a delivery trip, mark it as completed and navigate to next nearest trip
     else if (trip && id?.startsWith('DEL-')) {
       // Find the trip and mark it as completed
       const tripIndex = trips.findIndex(t => t.id === id);
@@ -144,12 +188,16 @@ const OrderDetails = () => {
         description: "Order has been delivered successfully",
       });
       
-      // Log the current state of trips
-      console.log("After completing delivery, all trips:", trips);
-      console.log("Completed trips:", trips.filter(t => t.status === 'COMPLETED'));
+      // Find the next nearest trip
+      const nextTrip = findNextNearestTrip();
       
-      // Navigate to history after completing the delivery
-      navigate('/history');
+      if (nextTrip) {
+        // Navigate to that trip
+        navigate(`/active-trip/${nextTrip.id}`);
+      } else {
+        // Navigate to dashboard if no next trip
+        navigate('/');
+      }
     }
   };
 

@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { trips, Trip } from '../data/trips';
 import NavBar from '../components/NavBar';
 import TripCard from '../components/TripCard';
 import TripTypeToggle from '../components/TripTypeToggle';
 
 const Index = () => {
-  const [activeType, setActiveType] = useState<"EXPRESS" | "STANDARD">("STANDARD");
+  const [activeType, setActiveType] = React.useState<"EXPRESS" | "STANDARD">("STANDARD");
   
   // Filter active trips only (not completed)
   const activeTrips = trips.filter(trip => trip.status !== 'COMPLETED');
@@ -15,18 +15,31 @@ const Index = () => {
   // Sort trips by distance (nearest to farthest)
   const sortedTrips = [...filteredTrips].sort((a, b) => a.distance - b.distance);
   
-  // Classify trips by their purpose
-  const pickupTrips = sortedTrips.filter(trip => trip.action === "PICKUP" && trip.status === "PICKUP");
-  const collectTrips = sortedTrips.filter(trip => trip.action === "COLLECT" && trip.status === "PICKUP");
-  const dropTrips = sortedTrips.filter(trip => trip.status === "DROP");
-  const deliveryTrips = sortedTrips.filter(trip => trip.id.startsWith('DEL-') && trip.status === "PICKUP");
-
   // Find the first trip overall to enable (the closest one)
-  const allSortedTrips = [...pickupTrips, ...collectTrips, ...dropTrips, ...deliveryTrips];
-  const firstTripId = allSortedTrips.length > 0 ? allSortedTrips[0].id : null;
+  const firstTripId = sortedTrips.length > 0 ? sortedTrips[0].id : null;
 
   // Function to determine if a trip should be enabled
-  const isEnabled = (trip: Trip) => trip.id === firstTripId;
+  const isEnabled = (trip: Trip) => {
+    // If this is the first trip, enable it
+    if (trip.id === firstTripId) return true;
+    
+    // If this is a drop trip, check if corresponding pickup is completed
+    if (trip.status === 'DROP') {
+      // Extract the base ID to find the original pickup trip
+      const baseId = trip.id.split('-')[1];
+      const pickupTrip = trips.find(t => t.id === `PICKUP-${baseId}` || t.id === `EXP-${baseId}` || t.id === `STD-${baseId}`);
+      return pickupTrip?.status === 'COMPLETED';
+    }
+    
+    // If this is a delivery trip, check if corresponding collect trip is completed
+    if (trip.id.startsWith('DEL-')) {
+      const baseId = trip.id.split('-')[1];
+      const collectTrip = trips.find(t => t.action === 'COLLECT' && t.id.includes(baseId));
+      return collectTrip?.status === 'COMPLETED';
+    }
+    
+    return false;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
@@ -44,66 +57,14 @@ const Index = () => {
             <p className="text-gray-500">No {activeType.toLowerCase()} trips available</p>
           </div>
         ) : (
-          <div>
-            {dropTrips.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-700 mb-3">Drop</h2>
-                <div className="space-y-4">
-                  {dropTrips.map((trip) => (
-                    <TripCard 
-                      key={trip.id} 
-                      trip={trip} 
-                      isEnabled={isEnabled(trip)} 
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {pickupTrips.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-700 mb-3">Pick up</h2>
-                <div className="space-y-4">
-                  {pickupTrips.map((trip) => (
-                    <TripCard 
-                      key={trip.id} 
-                      trip={trip} 
-                      isEnabled={isEnabled(trip)} 
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {collectTrips.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-700 mb-3">Collect</h2>
-                <div className="space-y-4">
-                  {collectTrips.map((trip) => (
-                    <TripCard 
-                      key={trip.id} 
-                      trip={trip} 
-                      isEnabled={isEnabled(trip)} 
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {deliveryTrips.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-700 mb-3">Delivery</h2>
-                <div className="space-y-4">
-                  {deliveryTrips.map((trip) => (
-                    <TripCard 
-                      key={trip.id} 
-                      trip={trip} 
-                      isEnabled={isEnabled(trip)} 
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="space-y-4 mt-4">
+            {sortedTrips.map((trip) => (
+              <TripCard 
+                key={trip.id} 
+                trip={trip} 
+                isEnabled={isEnabled(trip)} 
+              />
+            ))}
           </div>
         )}
       </div>
