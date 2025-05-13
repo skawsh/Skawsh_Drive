@@ -6,13 +6,16 @@ import { MapPin, User, Phone, Store } from 'lucide-react';
 
 interface TripCardProps {
   trip: Trip;
+  isEnabled?: boolean;
 }
 
-const TripCard: React.FC<TripCardProps> = ({ trip }) => {
+const TripCard: React.FC<TripCardProps> = ({ trip, isEnabled = true }) => {
   const navigate = useNavigate();
   
   const handleStartTrip = () => {
-    navigate(`/active-trip/${trip.id}`);
+    if (isEnabled) {
+      navigate(`/active-trip/${trip.id}`);
+    }
   };
 
   // Determine if this is a pickup, collect, drop or delivery trip
@@ -28,7 +31,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
   if (isDelivery) buttonText = 'Start Delivery';
 
   return (
-    <div className="bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100">
+    <div className={`bg-white rounded-lg shadow-md mb-4 p-4 border border-gray-100 ${!isEnabled ? 'opacity-70' : ''}`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex flex-col">
           <span className="text-sm font-medium text-laundry-primary">ID: {trip.id}</span>
@@ -85,9 +88,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
       
       <button
         onClick={handleStartTrip}
-        className="w-full py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 transition-colors"
+        disabled={!isEnabled}
+        className={`w-full py-2 ${isEnabled ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'} text-white rounded-md font-medium transition-colors`}
       >
-        {buttonText}
+        {isEnabled ? buttonText : 'Complete Previous Trip First'}
       </button>
     </div>
   );
